@@ -85,9 +85,14 @@ export default function RecipeForm() {
       ...(isEditing ? { id } : {})
     };
 
-    await mockDb.saveRecipe(recipeData, ingredients);
-    setLoading(false);
-    navigate('/');
+    try {
+      await mockDb.saveRecipe(recipeData, ingredients);
+      navigate('/');
+    } catch (err) {
+      alert(`Failed to save recipe: ${err.message}`);
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (fetching) return <div className="p-8 text-slate-400">Loading recipe...</div>;

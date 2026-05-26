@@ -7,6 +7,8 @@ import {
 import { read, utils } from 'xlsx';
 import { mockDb } from '../services/supabase';
 
+const UNITS = ['kg', 'g', 'L', 'ml', 'tsp', 'tbsp', 'cup', 'pcs'];
+
 export default function UploadRecipe() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('document'); // 'document' | 'image' | 'text'
@@ -330,6 +332,7 @@ export default function UploadRecipe() {
       navigate('/');
     } catch (err) {
       setErrorMsg(`Failed to save recipe: ${err.message}`);
+    } finally {
       setLoading(false);
     }
   };
@@ -542,7 +545,7 @@ export default function UploadRecipe() {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-400 mb-1.5">Yield Yield Quantity</label>
+                  <label className="block text-xs font-medium text-slate-400 mb-1.5">Yield Quantity</label>
                   <div className="flex gap-2">
                     <input
                       type="number"
@@ -551,13 +554,13 @@ export default function UploadRecipe() {
                       onChange={(e) => setOutputQty(e.target.value)}
                       className="w-2/3 bg-slate-900 border border-slate-800 rounded-xl py-2.5 px-4 text-white text-sm focus:outline-none focus:border-emerald-500"
                     />
-                    <input
-                      type="text"
+                    <select
                       value={outputUnit}
                       onChange={(e) => setOutputUnit(e.target.value)}
-                      className="w-1/3 bg-slate-900 border border-slate-800 rounded-xl py-2.5 px-4 text-white text-sm focus:outline-none focus:border-emerald-500"
-                      placeholder="kg"
-                    />
+                      className="w-1/3 bg-slate-900 border border-slate-800 rounded-xl py-2.5 px-4 text-white text-sm focus:outline-none focus:border-emerald-500 appearance-none"
+                    >
+                      {UNITS.map(u => <option key={u} value={u} className="bg-slate-900 text-slate-100">{u}</option>)}
+                    </select>
                   </div>
                 </div>
               </div>
@@ -588,13 +591,13 @@ export default function UploadRecipe() {
                         />
                       </div>
                       <div className="md:col-span-1">
-                        <input
-                          type="text"
+                        <select
                           value={ing.unit}
                           onChange={(e) => handleIngredientChange(index, 'unit', e.target.value)}
-                          className="w-full bg-slate-950 border border-slate-800 rounded-lg py-2 px-3 text-slate-200 text-sm focus:outline-none focus:border-emerald-500"
-                          placeholder="Unit"
-                        />
+                          className="w-full bg-slate-950 border border-slate-800 rounded-lg py-2 px-1 text-slate-200 text-sm focus:outline-none focus:border-emerald-500 appearance-none"
+                        >
+                          {UNITS.map(u => <option key={u} value={u} className="bg-slate-900 text-slate-100">{u}</option>)}
+                        </select>
                       </div>
                       <div className="md:col-span-2">
                         <input

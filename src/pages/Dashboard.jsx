@@ -21,8 +21,12 @@ export default function Dashboard() {
 
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this recipe?')) {
-      await mockDb.deleteRecipe(id);
-      fetchRecipes();
+      try {
+        await mockDb.deleteRecipe(id);
+        fetchRecipes();
+      } catch (err) {
+        alert(`Failed to delete recipe: ${err.message}`);
+      }
     }
   };
 

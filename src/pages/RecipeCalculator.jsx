@@ -113,19 +113,19 @@ export default function RecipeCalculator() {
   };
   
   // Safe formatting
-  const formatNumber = (val) => {
+  function formatNumber(val) {
     const num = parseFloat(val);
     if (num === 0) return '0';
     if (isNaN(num)) return '-';
     // Round to 3 decimal places max if necessary
     return Number.isInteger(num) ? num : parseFloat(num.toFixed(3));
-  };
+  }
 
-  const formatCurrency = (val) => {
+  function formatCurrency(val) {
     const num = parseFloat(val);
     if (isNaN(num) || num === 0) return '₹0.00';
     return `₹${num.toFixed(2)}`;
-  };
+  }
 
   return (
     <div className="max-w-6xl mx-auto pb-10 animate-fade-in">

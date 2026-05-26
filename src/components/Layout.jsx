@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { Home, PlusSquare, Upload, Calculator } from 'lucide-react';
 
 export default function Layout() {
   const location = useLocation();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navItems = [
     { name: 'Dashboard', path: '/', icon: <Home className="w-5 h-5" /> },
@@ -51,8 +53,34 @@ export default function Layout() {
             <img src="/logo.png" alt="ScaleCraft Logo" className="w-12 h-12 rounded-full border border-red-500/30 shadow-[0_0_10px_rgba(239,68,68,0.25)] object-cover" />
             <img src="/title_logo.png" alt="SCALECRAFT Logo" className="app-title-logo w-28 h-8" />
           </div>
-          <button className="text-slate-400">Menu</button>
+          <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-slate-400">
+            {isMobileMenuOpen ? 'Close' : 'Menu'}
+          </button>
         </header>
+
+        {/* Mobile Navigation Dropdown */}
+        {isMobileMenuOpen && (
+          <nav className="md:hidden glass border-b border-slate-800 p-4 absolute top-[81px] left-0 right-0 z-20 flex flex-col gap-2">
+            {navItems.map((item) => {
+              const isActive = location.pathname === item.path;
+              return (
+                <Link
+                  key={item.name}
+                  to={item.path}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+                    isActive 
+                      ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.1)]' 
+                      : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
+                  }`}
+                >
+                  {item.icon}
+                  <span className="font-medium">{item.name}</span>
+                </Link>
+              );
+            })}
+          </nav>
+        )}
 
         {/* Decorative Background Elements */}
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-emerald-900/20 blur-[120px] pointer-events-none" />
