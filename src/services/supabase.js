@@ -297,5 +297,55 @@ export const mockDb = {
       return !!user.can_delete_recipe;
     }
     return false;
+  },
+
+  getUsers: async (currentUserId) => {
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const currentUser = users.find(u => u.id === currentUserId);
+    if (!currentUser || currentUser.role !== 'Admin') {
+      return { error: new Error('Unauthorized') };
+    }
+    const safeUsers = users.map(u => ({
+      id: u.id,
+      username: u.username,
+      role: u.role,
+      can_delete_recipe: u.can_delete_recipe
+    }));
+    return { data: safeUsers, error: null };
+  },
+
+  updateUser: async (targetId, updates, currentUserId) => {
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const currentUser = users.find(u => u.id === currentUserId);
+    if (!currentUser || currentUser.role !== 'Admin') {
+      return { error: new Error('Unauthorized') };
+    }
+
+    const targetIndex = users.findIndex(u => u.id === targetId);
+    if (targetIndex === -1) return { error: new Error('User not found') };
+
+    if (targetId === currentUserId && updates.role && updates.role !== currentUser.role) {
+      return { error: new Error('Cannot change your own role') };
+    }
+
+    users[targetIndex] = { ...users[targetIndex], ...updates };
+    localStorage.setItem('users', JSON.stringify(users));
+    return { data: users[targetIndex], error: null };
+  },
+
+  deleteUser: async (targetId, currentUserId) => {
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const currentUser = users.find(u => u.id === currentUserId);
+    if (!currentUser || currentUser.role !== 'Admin') {
+      return { error: new Error('Unauthorized') };
+    }
+
+    if (targetId === currentUserId) {
+      return { error: new Error('Cannot delete your own account') };
+    }
+
+    const filtered = users.filter(u => u.id !== targetId);
+    localStorage.setItem('users', JSON.stringify(filtered));
+    return { error: null };
   }
 };

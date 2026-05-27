@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Shield, UserPlus, Lock, User, ToggleLeft, ToggleRight, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Shield, UserPlus, Lock, User, ToggleLeft, ToggleRight, AlertCircle, CheckCircle2, Users, Search, Trash2 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { mockDb } from '../services/supabase';
 
@@ -17,6 +17,17 @@ export default function AdminSettings() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
+  const [usersList, setUsersList] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const fetchUsers = async () => {
+    const res = await mockDb.getUsers(user?.id);
+    if (!res.error) setUsersList(res.data);
+  };
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -61,12 +72,42 @@ export default function AdminSettings() {
         role: 'User', 
         canDeleteRecipe: false 
       });
+      fetchUsers();
     } catch (err) {
       setError(err.message || 'Failed to create user.');
     } finally {
       setLoading(false);
     }
   };
+
+  const handleToggleRole = async (targetUser) => {
+    const newRole = targetUser.role === 'Admin' ? 'User' : 'Admin';
+    if (targetUser.id === user?.id && newRole !== 'Admin') {
+      alert("You cannot remove your own Admin role.");
+      return;
+    }
+    const res = await mockDb.updateUser(targetUser.id, { role: newRole }, user?.id);
+    if (!res.error) fetchUsers();
+  };
+
+  const handleToggleDeletePerm = async (targetUser) => {
+    const res = await mockDb.updateUser(targetUser.id, { can_delete_recipe: !targetUser.can_delete_recipe }, user?.id);
+    if (!res.error) fetchUsers();
+  };
+
+  const handleDeleteUser = async (targetId) => {
+    if (targetId === user?.id) {
+      alert("You cannot delete your own account.");
+      return;
+    }
+    if (window.confirm("Are you sure you want to permanently delete this user?")) {
+      const res = await mockDb.deleteUser(targetId, user?.id);
+      if (!res.error) fetchUsers();
+      else alert(res.error.message);
+    }
+  };
+
+  const filteredUsers = usersList.filter(u => u.username.toLowerCase().includes(searchQuery.toLowerCase()));
 
   return (
     <div className="max-w-4xl mx-auto animate-fade-in pb-10">
@@ -203,24 +244,78 @@ export default function AdminSettings() {
           </form>
         </div>
 
-        {/* Info Panel */}
-        <div className="glass-card rounded-2xl p-6 md:p-8 flex flex-col items-center justify-center text-center">
-           <Shield className="w-20 h-20 text-orange-500/20 mb-6" />
-           <h3 className="text-xl font-bold text-slate-200 mb-4">Security Guidelines</h3>
-           <ul className="text-slate-400 text-sm space-y-3 text-left">
-             <li className="flex items-start gap-2">
-               <div className="w-1.5 h-1.5 rounded-full bg-orange-500 mt-1.5 shrink-0" />
-               <span>Passwords are securely hashed before being stored in the database.</span>
-             </li>
-             <li className="flex items-start gap-2">
-               <div className="w-1.5 h-1.5 rounded-full bg-orange-500 mt-1.5 shrink-0" />
-               <span>Standard Users have read/write access but cannot delete formulas by default.</span>
-             </li>
-             <li className="flex items-start gap-2">
-               <div className="w-1.5 h-1.5 rounded-full bg-orange-500 mt-1.5 shrink-0" />
-               <span>Administrators have global access, including the ability to provision new users on this panel.</span>
-             </li>
-           </ul>
+        {/* Manage Users Panel */}
+        <div className="glass-card rounded-2xl p-6 md:p-8 border-slate-700/50 shadow-[0_0_20px_rgba(0,0,0,0.2)] flex flex-col h-full">
+          <div className="flex items-center gap-3 mb-6 border-b border-slate-800 pb-4">
+            <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-300">
+              <Users className="w-5 h-5" />
+            </div>
+            <h2 className="text-xl font-semibold text-white">Manage Existing Users</h2>
+          </div>
+
+          <div className="relative mb-6">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full bg-slate-900/80 border border-slate-700/50 rounded-xl py-2.5 pl-10 pr-4 text-slate-200 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all placeholder:text-slate-500 text-sm"
+              placeholder="Search by username..."
+            />
+          </div>
+
+          <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 space-y-3">
+            {filteredUsers.length === 0 ? (
+              <div className="text-center py-8 text-slate-500 text-sm">No users found.</div>
+            ) : (
+              filteredUsers.map(u => (
+                <div key={u.id} className="bg-slate-900/50 border border-slate-700/50 rounded-xl p-4 flex flex-col gap-3">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <p className="font-semibold text-slate-200 flex items-center gap-2">
+                        {u.username}
+                        {u.id === user?.id && <span className="text-[10px] bg-orange-500/20 text-orange-400 px-1.5 py-0.5 rounded font-bold uppercase">You</span>}
+                      </p>
+                      <p className="text-xs text-slate-400 mt-0.5">ID: {u.id.substring(0,8)}...</p>
+                    </div>
+                    <button 
+                      onClick={() => handleDeleteUser(u.id)}
+                      disabled={u.id === user?.id}
+                      className="p-1.5 text-slate-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-slate-500"
+                      title="Delete User"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-2 mt-2">
+                    <button 
+                      onClick={() => handleToggleRole(u)}
+                      className={`text-xs py-1.5 px-2 rounded-lg border font-medium flex items-center justify-center transition-colors ${
+                        u.role === 'Admin' 
+                          ? 'bg-orange-500/10 border-orange-500/30 text-orange-400 hover:bg-orange-500/20' 
+                          : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
+                      }`}
+                    >
+                      Role: {u.role}
+                    </button>
+                    
+                    <button 
+                      onClick={() => handleToggleDeletePerm(u)}
+                      className={`text-xs py-1.5 px-2 rounded-lg border font-medium flex items-center justify-center transition-colors ${
+                        u.can_delete_recipe 
+                          ? 'bg-red-500/10 border-red-500/30 text-red-400 hover:bg-red-500/20' 
+                          : 'bg-slate-800 border-slate-700 text-slate-400 hover:bg-slate-700'
+                      }`}
+                      title="Toggle Delete Recipe Permission"
+                    >
+                      Can Delete: {u.can_delete_recipe ? 'Yes' : 'No'}
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
         </div>
       </div>
     </div>
