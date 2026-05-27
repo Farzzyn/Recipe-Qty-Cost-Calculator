@@ -73,7 +73,17 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center animate-fade-in p-4">
+    <div className="min-h-[80vh] flex flex-col items-center justify-center animate-fade-in p-4">
+      
+      {/* App Branding */}
+      <div className="flex flex-col items-center mb-8 gap-3">
+        <img src="/logo.svg" alt="RG FOODS Logo" className="h-20 w-auto object-contain drop-shadow-xl" />
+        <div className="text-center">
+          <h1 className="text-3xl font-black text-red-500 tracking-tight leading-none pt-1">RG FOODS</h1>
+          <p className="text-sm mt-1 uppercase tracking-wider font-semibold text-slate-300">Recipe Calculator</p>
+        </div>
+      </div>
+
       <div className="glass-card w-full max-w-md rounded-2xl overflow-hidden shadow-[0_0_40px_rgba(230,81,0,0.1)] relative">
         
         {/* Header Tabs */}
