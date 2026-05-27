@@ -61,11 +61,20 @@ ALTER TABLE ingredients ENABLE ROW LEVEL SECURITY;
 -- 1. Anyone logged in can read profiles (avoids infinite recursion)
 CREATE POLICY "Authenticated users can read profiles" ON users FOR SELECT USING (auth.uid() IS NOT NULL);
 
--- 2. Allow users to create their own profile
-CREATE POLICY "Users can insert their own profile" ON users FOR INSERT WITH CHECK (auth.uid() = id);
+-- 2. Only Admins can create new user profiles (Used when Admin dashboard creates a user)
+CREATE POLICY "Admins can insert users" ON users FOR INSERT WITH CHECK (
+    (SELECT role FROM users WHERE id = auth.uid()) = 'Admin'
+);
 
--- 3. Admins can update roles (we rely on the application backend/frontend to strictly enforce this for security)
-CREATE POLICY "Admins can update users" ON users FOR UPDATE USING (auth.uid() IS NOT NULL);
+-- 3. Only Admins can update roles and permissions
+CREATE POLICY "Admins can update users" ON users FOR UPDATE USING (
+    (SELECT role FROM users WHERE id = auth.uid()) = 'Admin'
+);
+
+-- 4. Only Admins can delete users
+CREATE POLICY "Admins can delete users" ON users FOR DELETE USING (
+    (SELECT role FROM users WHERE id = auth.uid()) = 'Admin'
+);
 
 -- Recipes Policies:
 CREATE POLICY "Authenticated users can read recipes" ON recipes FOR SELECT USING (auth.uid() IS NOT NULL);
