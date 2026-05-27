@@ -22,10 +22,10 @@ export default function Layout() {
     <div className="flex h-screen bg-slate-950 text-slate-100 font-sans selection:bg-purple-500/30">
       {/* Sidebar Navigation */}
       <aside className="w-64 glass border-r border-slate-800 flex flex-col hidden md:flex print:hidden">
-        <div className="hidden md:flex flex-col gap-2 p-6 border-b border-slate-800">
-          <img src="/logo.svg" alt="RG Logo" className="h-14 w-auto object-contain flex-shrink-0" />
-          <div className="flex flex-col justify-center mt-2">
-            <h1 className="text-2xl font-black text-red-500 tracking-tight leading-none pt-1">RG</h1>
+        <div className="p-6 flex items-center gap-3">
+          <img src="/logo.svg" alt="RG FOODS Logo" className="h-14 w-auto object-contain flex-shrink-0" />
+          <div className="flex flex-col justify-center">
+            <h1 className="text-2xl font-black text-red-500 tracking-tight leading-none pt-1">RG FOODS</h1>
             <p className="text-xs mt-0.5 uppercase tracking-wider font-semibold" style={{ color: '#E0E0E0' }}>Recipe Calculator</p>
           </div>
         </div>
@@ -71,8 +71,8 @@ export default function Layout() {
         {/* Mobile Header */}
         <header className="md:hidden glass border-b border-slate-800 p-4 flex justify-between items-center z-10 print:hidden">
           <div className="flex items-center gap-3">
-            <img src="/logo.svg" alt="RG Logo" className="h-12 w-auto object-contain" />
-            <h1 className="text-xl font-black text-red-500 tracking-tight">RG</h1>
+            <img src="/logo.svg" alt="RG FOODS Logo" className="h-12 w-auto object-contain" />
+            <h1 className="text-xl font-black text-red-500 tracking-tight">RG FOODS</h1>
           </div>
           <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-slate-400">
             {isMobileMenuOpen ? 'Close' : 'Menu'}

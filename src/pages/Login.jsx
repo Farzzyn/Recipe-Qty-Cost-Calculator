@@ -48,9 +48,9 @@ export default function Login() {
       
       {/* App Branding */}
       <div className="flex flex-col items-center mb-8 gap-3">
-        <img src="/logo.svg" alt="RG Logo" className="h-20 w-auto object-contain drop-shadow-xl" />
-        <div className="flex flex-col justify-center mt-1">
-          <h1 className="text-3xl font-black text-red-500 tracking-tight leading-none pt-1">RG</h1>
+        <img src="/logo.svg" alt="RG FOODS Logo" className="h-20 w-auto object-contain drop-shadow-xl" />
+        <div className="text-center">
+          <h1 className="text-3xl font-black text-red-500 tracking-tight leading-none pt-1">RG FOODS</h1>
           <p className="text-sm mt-1 uppercase tracking-wider font-semibold text-slate-300">Recipe Calculator</p>
         </div>
       </div>
