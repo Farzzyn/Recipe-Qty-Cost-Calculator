@@ -114,12 +114,14 @@ export const mockDb = {
           .eq('id', targetId)
           .select();
       } else {
+        const { data: { user } } = await supabase.auth.getUser();
         recipeResult = await supabase
           .from('recipes')
           .insert({
             product_name: recipeData.product_name,
             output_quantity: parseFloat(recipeData.output_quantity) || 1,
-            output_unit: recipeData.output_unit
+            output_unit: recipeData.output_unit,
+            created_by: user?.id
           })
           .select();
       }
