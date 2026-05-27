@@ -76,29 +76,6 @@ export default function RecipeCalculator() {
     window.print();
   };
 
-  const exportToText = () => {
-    if (!validateExport()) return;
-    const lines = [];
-    lines.push(`Product Name: ${recipe.product_name}`);
-    lines.push(`Required Quantity: ${targetOutput} ${recipe.output_unit}`);
-    lines.push(`Total Product Cost: ${formatCurrency(totalCost)}`);
-    lines.push('');
-    lines.push('Ingredient Name\tQuantity\tUnit\tCost');
-    calculatedIngredients.forEach(ing => {
-      const costStr = ing.calculatedCost > 0 ? formatCurrency(ing.calculatedCost) : '-';
-      lines.push(`${ing.ingredient_name}\t${formatNumber(ing.displayScaledQty)}\t${ing.displayUnit}\t${costStr}`);
-    });
-
-    const blob = new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.setAttribute('href', url);
-    link.setAttribute('download', getExportFilename('txt'));
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
   const exportToCSV = () => {
     if (!validateExport()) return;
     const headers = ['Ingredient Name', 'Quantity', 'Unit', 'Cost'];
@@ -254,9 +231,6 @@ export default function RecipeCalculator() {
           </button>
           <button onClick={exportToCSV} className="flex items-center gap-2 px-4 py-2 bg-emerald-500/20 text-emerald-400 rounded-lg hover:bg-emerald-500/30 transition">
             <Download className="w-4 h-4" /> Export CSV
-          </button>
-          <button onClick={exportToText} className="flex items-center gap-2 px-4 py-2 bg-emerald-500/20 text-emerald-400 rounded-lg hover:bg-emerald-500/30 transition">
-            <Download className="w-4 h-4" /> Export Text
           </button>
         </div>
       </div>
