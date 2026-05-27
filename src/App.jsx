@@ -7,6 +7,7 @@ import RecipeForm from './pages/RecipeForm';
 import RecipeCalculator from './pages/RecipeCalculator';
 import UploadRecipe from './pages/UploadRecipe';
 import Login from './pages/Login';
+import AdminSettings from './pages/AdminSettings';
 
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -15,6 +16,17 @@ const PrivateRoute = ({ children }) => {
   if (loading) return null;
   if (!user) {
     return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  return children;
+};
+
+const AdminRoute = ({ children }) => {
+  const { user, isAdmin, loading } = useAuth();
+
+  if (loading) return null;
+  if (!user || !isAdmin()) {
+    return <Navigate to="/" replace />;
   }
 
   return children;
@@ -32,6 +44,7 @@ function App() {
             <Route path="recipe/edit/:id" element={<RecipeForm />} />
             <Route path="recipe/calc/:id" element={<RecipeCalculator />} />
             <Route path="upload" element={<UploadRecipe />} />
+            <Route path="admin" element={<AdminRoute><AdminSettings /></AdminRoute>} />
             <Route path="*" element={
               <div className="flex flex-col items-center justify-center h-full text-center p-8 animate-fade-in">
                 <h2 className="text-4xl font-bold text-white mb-4">404</h2>

@@ -260,7 +260,7 @@ export const mockDb = {
     return { data: null, error: new Error('Invalid username or password') };
   },
 
-  registerAdmin: async (adminUsername, adminPassword, currentUserId) => {
+  createUser: async (username, password, role, canDeleteRecipe, currentUserId) => {
     const users = JSON.parse(localStorage.getItem('users') || '[]');
     const hasAdmins = users.some(u => u.role === 'Admin');
     
@@ -271,16 +271,16 @@ export const mockDb = {
       }
     }
 
-    if (users.find(u => u.username === adminUsername)) {
+    if (users.find(u => u.username === username)) {
       return { error: new Error('Username already exists') };
     }
 
     const newUser = {
       id: crypto.randomUUID(),
-      username: adminUsername,
-      password: adminPassword, 
-      role: 'Admin',
-      can_delete_recipe: true
+      username: username,
+      password: password, 
+      role: role || 'User',
+      can_delete_recipe: !!canDeleteRecipe
     };
     
     users.push(newUser);

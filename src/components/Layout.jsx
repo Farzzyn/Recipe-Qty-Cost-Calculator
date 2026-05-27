@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { Home, PlusSquare, Upload, Calculator, LogOut } from 'lucide-react';
+import { Home, PlusSquare, Upload, Calculator, LogOut, Shield } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export default function Layout() {
@@ -13,6 +13,10 @@ export default function Layout() {
     { name: 'Add Recipe', path: '/recipe/new', icon: <PlusSquare className="w-5 h-5" /> },
     { name: 'Upload Recipe', path: '/upload', icon: <Upload className="w-5 h-5" /> }
   ];
+
+  if (user?.role === 'Admin') {
+    navItems.push({ name: 'Admin Settings', path: '/admin', icon: <Shield className="w-5 h-5" /> });
+  }
 
   return (
     <div className="flex h-screen bg-slate-950 text-slate-100 font-sans selection:bg-orange-500/30">
