@@ -245,43 +245,43 @@ export default function AdminSettings() {
         </div>
 
         {/* Manage Users Panel */}
-        <div className="glass-card rounded-2xl p-6 md:p-8 border-slate-700/50 shadow-[0_0_20px_rgba(0,0,0,0.2)] flex flex-col h-full bg-[#0d1424]">
-          <div className="flex items-center gap-4 mb-6 border-b border-slate-800/60 pb-6">
-            <div className="w-12 h-12 rounded-full bg-slate-800/80 flex items-center justify-center text-slate-300 border border-slate-700/50">
-              <Users className="w-6 h-6" />
+        <div className="glass-card rounded-2xl p-6 md:p-8 border-slate-700/50 shadow-[0_0_20px_rgba(0,0,0,0.2)] flex flex-col h-full">
+          <div className="flex items-center gap-3 mb-6 border-b border-slate-800 pb-4">
+            <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-300">
+              <Users className="w-5 h-5" />
             </div>
-            <h2 className="text-2xl font-bold text-white tracking-tight">Manage Existing Users</h2>
+            <h2 className="text-xl font-semibold text-white">Manage Existing Users</h2>
           </div>
 
-          <div className="relative mb-8">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
+          <div className="relative mb-6">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[#131b2f] border border-slate-700/50 rounded-xl py-3 pl-11 pr-4 text-slate-200 focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/50 transition-all placeholder:text-slate-500"
+              className="w-full bg-[#0B1120] border border-slate-800 rounded-xl py-3 pl-10 pr-4 text-slate-200 focus:outline-none focus:border-slate-600 focus:ring-1 focus:ring-slate-600 transition-all placeholder:text-slate-500 text-sm shadow-inner"
               placeholder="Search by username..."
             />
           </div>
 
-          <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 space-y-4">
+          <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 space-y-3">
             {filteredUsers.length === 0 ? (
               <div className="text-center py-8 text-slate-500 text-sm">No users found.</div>
             ) : (
               filteredUsers.map(u => (
-                <div key={u.id} className="bg-[#111827] border border-slate-700/60 rounded-xl p-5 flex flex-col gap-4 shadow-sm">
+                <div key={u.id} className="bg-[#111827]/80 border border-slate-800/80 rounded-xl p-5 flex flex-col gap-4 mb-3">
                   <div className="flex items-start justify-between">
                     <div>
-                      <p className="font-bold text-lg text-slate-100 flex items-center gap-3">
+                      <p className="font-bold text-lg text-white flex items-center gap-2">
                         {u.username}
-                        {u.id === user?.id && <span className="text-[10px] bg-[#3d1a04] border border-[#a14b14] text-[#ff6600] px-2 py-0.5 rounded font-bold uppercase tracking-wide">You</span>}
+                        {u.id === user?.id && <span className="text-[10px] bg-orange-600/20 border border-orange-500/20 text-orange-500 px-1.5 py-0.5 rounded font-black uppercase tracking-widest">YOU</span>}
                       </p>
-                      <p className="text-[13px] text-slate-400 mt-1">ID: {u.id.substring(0,8)}...</p>
+                      <p className="text-sm text-slate-400 mt-0.5 tracking-wide">ID: {u.id.substring(0,8)}...</p>
                     </div>
                     <button 
                       onClick={() => handleDeleteUser(u.id)}
                       disabled={u.id === user?.id}
-                      className="p-1.5 text-slate-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-slate-500"
+                      className="p-1.5 text-slate-600 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-slate-600"
                       title="Delete User"
                     >
                       <Trash2 className="w-5 h-5" />
@@ -293,8 +293,8 @@ export default function AdminSettings() {
                       onClick={() => handleToggleRole(u)}
                       className={`text-sm py-2 px-3 rounded-lg border font-semibold flex items-center justify-center transition-colors ${
                         u.role === 'Admin' 
-                          ? 'bg-[#1c1411] border-[#713f28] text-[#ff8c00] hover:bg-[#2a1a11]' 
-                          : 'bg-[#1f2937] border-slate-700 text-slate-300 hover:bg-slate-800'
+                          ? 'bg-orange-500/5 border-orange-500/20 text-orange-500 hover:bg-orange-500/10' 
+                          : 'bg-slate-800/50 border-slate-700/50 text-slate-300 hover:bg-slate-800'
                       }`}
                     >
                       Role: {u.role}
@@ -304,8 +304,8 @@ export default function AdminSettings() {
                       onClick={() => handleToggleDeletePerm(u)}
                       className={`text-sm py-2 px-3 rounded-lg border font-semibold flex items-center justify-center transition-colors ${
                         u.can_delete_recipe 
-                          ? 'bg-[#231215] border-[#6b2c34] text-[#ff4d4d] hover:bg-[#32171c]' 
-                          : 'bg-[#1f2937] border-slate-700 text-slate-400 hover:bg-slate-800'
+                          ? 'bg-red-500/5 border-red-500/20 text-red-500 hover:bg-red-500/10' 
+                          : 'bg-slate-800/50 border-slate-700/50 text-slate-300 hover:bg-slate-800'
                       }`}
                       title="Toggle Delete Recipe Permission"
                     >
