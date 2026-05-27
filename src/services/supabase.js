@@ -237,7 +237,7 @@ export const mockDb = {
 
   // ─── Auth & User Management ──────────────────────────────────────────────────
   loginUser: async (username, password) => {
-    const email = `${username.toLowerCase()}@rgfoods.local`;
+    const email = `${username.toLowerCase()}@rgfoods.com`;
     
     // Attempt real Supabase sign in
     const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
@@ -295,7 +295,7 @@ export const mockDb = {
       return { error: new Error('Unauthorized: Only an Admin can create new users.') };
     }
 
-    const email = `${username.toLowerCase()}@rgfoods.local`;
+    const email = `${username.toLowerCase()}@rgfoods.com`;
     
     // We use a secondary auth client that doesn't persist the session, so the admin isn't logged out
     const authClient = createClient(supabaseUrl, supabaseAnonKey, {
