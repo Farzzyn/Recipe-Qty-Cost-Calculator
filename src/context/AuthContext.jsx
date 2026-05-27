@@ -26,7 +26,8 @@ export const AuthProvider = ({ children }) => {
     return data;
   };
 
-  const logout = () => {
+  const logout = async () => {
+    await mockDb.logoutUser();
     setUser(null);
     localStorage.removeItem('currentUser');
   };

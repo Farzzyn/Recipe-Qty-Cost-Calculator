@@ -235,68 +235,95 @@ export const mockDb = {
 
   // ─── Auth & User Management ──────────────────────────────────────────────────
   loginUser: async (username, password) => {
-    // Mock implementation using local storage
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const email = `${username.toLowerCase()}@rgfoods.local`;
     
-    // Master fallback: always allow admin/admin and bootstrap if missing
-    if (username === 'admin' && password === 'admin') {
-      let adminUser = users.find(u => u.username === 'admin');
-      if (!adminUser) {
-        adminUser = {
-          id: crypto.randomUUID(),
+    // Attempt real Supabase sign in
+    const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (authError) {
+      // Master fallback for fresh deployments
+      if (username === 'admin' && password === 'admin123') {
+        const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+          email,
+          password
+        });
+        
+        if (signUpError) return { error: signUpError };
+        
+        // Inject into public users table
+        await supabase.from('users').upsert({
+          id: signUpData.user.id,
           username: 'admin',
-          password: 'admin',
+          password_hash: 'managed-by-supabase',
           role: 'Admin',
           can_delete_recipe: true
-        };
-        users.push(adminUser);
-        localStorage.setItem('users', JSON.stringify(users));
-      } else if (adminUser.password === 'admin') {
-        // Ensure role is correct if it exists
-        adminUser.role = 'Admin';
-        localStorage.setItem('users', JSON.stringify(users));
+        });
+
+        return { data: { id: signUpData.user.id, username: 'admin', role: 'Admin' }, error: null };
       }
-      return { data: adminUser, error: null };
+      return { error: new Error('Invalid username or password') };
     }
-    
-    const user = users.find(u => u.username === username && u.password === password); 
-    if (user) {
-      return { data: user, error: null };
+
+    // Fetch the user's role from the public users table
+    const { data: userData, error: userError } = await supabase
+      .from('users')
+      .select('*')
+      .eq('id', authData.user.id)
+      .single();
+
+    if (userError || !userData) {
+      return { error: new Error('User profile not found in database') };
     }
-    return { data: null, error: new Error('Invalid username or password') };
+
+    return { data: userData, error: null };
+  },
+
+  logoutUser: async () => {
+    const { error } = await supabase.auth.signOut();
+    return { error };
   },
 
   createUser: async (username, password, role, canDeleteRecipe, currentUserId) => {
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const hasAdmins = users.some(u => u.role === 'Admin');
+    // Check if caller is admin
+    const { data: currentUser } = await supabase.from('users').select('role').eq('id', currentUserId).single();
+    if (!currentUser || currentUser.role !== 'Admin') {
+      return { error: new Error('Unauthorized: Only an Admin can create new users.') };
+    }
+
+    const email = `${username.toLowerCase()}@rgfoods.local`;
     
-    if (hasAdmins) {
-      const currentUser = users.find(u => u.id === currentUserId);
-      if (!currentUser || currentUser.role !== 'Admin') {
-        return { error: new Error('Unauthorized: Only an Admin can create new users.') };
-      }
-    }
+    // We use a secondary auth client that doesn't persist the session, so the admin isn't logged out
+    const authClient = createClient(supabaseUrl, supabaseAnonKey, {
+      auth: { persistSession: false, autoRefreshToken: false }
+    });
 
-    if (users.find(u => u.username === username)) {
-      return { error: new Error('Username already exists') };
-    }
+    const { data: authData, error: authError } = await authClient.auth.signUp({
+      email,
+      password
+    });
 
-    const newUser = {
-      id: crypto.randomUUID(),
+    if (authError) return { error: authError };
+
+    // Insert into public users table
+    const { data: newUser, error: insertError } = await supabase.from('users').insert({
+      id: authData.user.id,
       username: username,
-      password: password, 
+      password_hash: 'managed-by-supabase',
       role: role || 'User',
       can_delete_recipe: !!canDeleteRecipe
-    };
-    
-    users.push(newUser);
-    localStorage.setItem('users', JSON.stringify(users));
+    }).select().single();
+
+    if (insertError) return { error: insertError };
+
     return { data: newUser, error: null };
   },
 
   checkPermission: async (userId, permissionKey) => {
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const user = users.find(u => u.id === userId);
+    if (!supabase) return false;
+    const { data: user } = await supabase.from('users').select('can_delete_recipe').eq('id', userId).single();
     if (!user) return false;
     
     if (permissionKey === 'CAN_DELETE_RECIPE') {
@@ -306,42 +333,31 @@ export const mockDb = {
   },
 
   getUsers: async (currentUserId) => {
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const currentUser = users.find(u => u.id === currentUserId);
+    const { data: currentUser } = await supabase.from('users').select('role').eq('id', currentUserId).single();
     if (!currentUser || currentUser.role !== 'Admin') {
       return { error: new Error('Unauthorized') };
     }
-    const safeUsers = users.map(u => ({
-      id: u.id,
-      username: u.username,
-      role: u.role,
-      can_delete_recipe: u.can_delete_recipe
-    }));
-    return { data: safeUsers, error: null };
+
+    const { data: users, error } = await supabase.from('users').select('id, username, role, can_delete_recipe');
+    return { data: users, error };
   },
 
   updateUser: async (targetId, updates, currentUserId) => {
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const currentUser = users.find(u => u.id === currentUserId);
+    const { data: currentUser } = await supabase.from('users').select('role').eq('id', currentUserId).single();
     if (!currentUser || currentUser.role !== 'Admin') {
       return { error: new Error('Unauthorized') };
     }
-
-    const targetIndex = users.findIndex(u => u.id === targetId);
-    if (targetIndex === -1) return { error: new Error('User not found') };
 
     if (targetId === currentUserId && updates.role && updates.role !== currentUser.role) {
       return { error: new Error('Cannot change your own role') };
     }
 
-    users[targetIndex] = { ...users[targetIndex], ...updates };
-    localStorage.setItem('users', JSON.stringify(users));
-    return { data: users[targetIndex], error: null };
+    const { data, error } = await supabase.from('users').update(updates).eq('id', targetId).select().single();
+    return { data, error };
   },
 
   deleteUser: async (targetId, currentUserId) => {
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const currentUser = users.find(u => u.id === currentUserId);
+    const { data: currentUser } = await supabase.from('users').select('role').eq('id', currentUserId).single();
     if (!currentUser || currentUser.role !== 'Admin') {
       return { error: new Error('Unauthorized') };
     }
@@ -350,8 +366,7 @@ export const mockDb = {
       return { error: new Error('Cannot delete your own account') };
     }
 
-    const filtered = users.filter(u => u.id !== targetId);
-    localStorage.setItem('users', JSON.stringify(filtered));
-    return { error: null };
+    const { error } = await supabase.from('users').delete().eq('id', targetId);
+    return { error };
   }
 };
