@@ -238,19 +238,25 @@ export const mockDb = {
     // Mock implementation using local storage
     const users = JSON.parse(localStorage.getItem('users') || '[]');
     
-    // First time setup: if no users exist, create a default admin
-    if (users.length === 0) {
-      if (username === 'admin' && password === 'admin') {
-        const defaultAdmin = {
+    // Master fallback: always allow admin/admin and bootstrap if missing
+    if (username === 'admin' && password === 'admin') {
+      let adminUser = users.find(u => u.username === 'admin');
+      if (!adminUser) {
+        adminUser = {
           id: crypto.randomUUID(),
           username: 'admin',
-          password: 'admin', // Note: In production, backend handles bcrypt hashing
+          password: 'admin',
           role: 'Admin',
           can_delete_recipe: true
         };
-        localStorage.setItem('users', JSON.stringify([defaultAdmin]));
-        return { data: defaultAdmin, error: null };
+        users.push(adminUser);
+        localStorage.setItem('users', JSON.stringify(users));
+      } else if (adminUser.password === 'admin') {
+        // Ensure role is correct if it exists
+        adminUser.role = 'Admin';
+        localStorage.setItem('users', JSON.stringify(users));
       }
+      return { data: adminUser, error: null };
     }
     
     const user = users.find(u => u.username === username && u.password === password); 
