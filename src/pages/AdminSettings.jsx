@@ -10,7 +10,6 @@ export default function AdminSettings() {
     username: '', 
     password: '', 
     confirmPassword: '',
-    role: 'User', // 'User' or 'Admin'
     canDeleteRecipe: false
   });
   
@@ -57,19 +56,18 @@ export default function AdminSettings() {
       const res = await mockDb.createUser(
         formData.username, 
         formData.password, 
-        formData.role, 
+        'User', // Force all new users to be standard users
         formData.canDeleteRecipe,
         user?.id
       );
       
       if (res.error) throw res.error;
       
-      setSuccess(`User '${formData.username}' created successfully as ${formData.role}!`);
+      setSuccess(`User '${formData.username}' created successfully as a Standard User!`);
       setFormData({ 
         username: '', 
         password: '', 
         confirmPassword: '', 
-        role: 'User', 
         canDeleteRecipe: false 
       });
       fetchUsers();
@@ -196,17 +194,11 @@ export default function AdminSettings() {
                 <div className="flex items-center justify-between p-4 bg-slate-900/50 rounded-xl border border-slate-700/50">
                   <div>
                     <p className="text-sm font-medium text-slate-200">System Role</p>
-                    <p className="text-xs text-slate-500">Determine baseline access level</p>
+                    <p className="text-xs text-slate-500">Standard User (Locked)</p>
                   </div>
-                  <select 
-                    name="role" 
-                    value={formData.role} 
-                    onChange={handleInputChange}
-                    className="bg-slate-800 border border-slate-700 text-slate-200 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block p-2"
-                  >
-                    <option value="User">Standard User</option>
-                    <option value="Admin">Administrator</option>
-                  </select>
+                  <div className="bg-slate-800 border border-slate-700 text-slate-400 text-sm rounded-lg px-3 py-1.5 cursor-not-allowed">
+                    Standard User
+                  </div>
                 </div>
 
                 <div 
@@ -289,16 +281,16 @@ export default function AdminSettings() {
                   </div>
                   
                   <div className="grid grid-cols-2 gap-3 mt-1">
-                    <button 
-                      onClick={() => handleToggleRole(u)}
-                      className={`text-sm py-2 px-3 rounded-lg border font-semibold flex items-center justify-center transition-colors ${
+                    <div 
+                      className={`text-sm py-2 px-3 rounded-lg border font-semibold flex items-center justify-center transition-colors cursor-default ${
                         u.role === 'Admin' 
-                          ? 'bg-orange-500/5 border-orange-500/20 text-orange-500 hover:bg-orange-500/10' 
-                          : 'bg-slate-800/50 border-slate-700/50 text-slate-300 hover:bg-slate-800'
+                          ? 'bg-orange-500/5 border-orange-500/20 text-orange-500' 
+                          : 'bg-slate-800/50 border-slate-700/50 text-slate-300'
                       }`}
+                      title="System Role (Locked)"
                     >
                       Role: {u.role}
-                    </button>
+                    </div>
                     
                     <button 
                       onClick={() => handleToggleDeletePerm(u)}
