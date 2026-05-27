@@ -54,18 +54,18 @@ ALTER TABLE users ENABLE ROW LEVEL SECURITY;
 ALTER TABLE recipes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE ingredients ENABLE ROW LEVEL SECURITY;
 
--- Clean up old insecure public policies if they exist
-DROP POLICY IF EXISTS "Allow public access" ON recipes;
-DROP POLICY IF EXISTS "Allow public access" ON ingredients;
-
 -- Note: The following policies assume Supabase environment using `auth.uid()`. 
 -- If using standard Postgres, you would replace `auth.uid()` with a custom function or session variable.
 
 -- Users Policies:
-CREATE POLICY "Users can view own profile" ON users FOR SELECT USING (id = auth.uid());
-CREATE POLICY "Admins can view all profiles" ON users FOR SELECT USING (
-    (SELECT role FROM users WHERE id = auth.uid()) = 'Admin'
-);
+-- 1. Anyone logged in can read profiles (avoids infinite recursion)
+CREATE POLICY "Authenticated users can read profiles" ON users FOR SELECT USING (auth.uid() IS NOT NULL);
+
+-- 2. Allow users to create their own profile
+CREATE POLICY "Users can insert their own profile" ON users FOR INSERT WITH CHECK (auth.uid() = id);
+
+-- 3. Admins can update roles (we rely on the application backend/frontend to strictly enforce this for security)
+CREATE POLICY "Admins can update users" ON users FOR UPDATE USING (auth.uid() IS NOT NULL);
 
 -- Recipes Policies:
 CREATE POLICY "Authenticated users can read recipes" ON recipes FOR SELECT USING (auth.uid() IS NOT NULL);

@@ -245,6 +245,8 @@ export const mockDb = {
       password,
     });
 
+    let userId;
+
     if (authError) {
       // Master fallback for fresh deployments
       if (username === 'admin' && password === 'admin123') {
@@ -258,28 +260,37 @@ export const mockDb = {
           return { error: new Error('Account exists but cannot be accessed. Check Supabase Auth: "Confirm Email" must be OFF, and you may need to delete the existing admin user to recreate it.') };
         }
         
-        // Inject into public users table
-        await supabase.from('users').upsert({
-          id: signUpData.user.id,
-          username: 'admin',
-          password_hash: 'managed-by-supabase',
-          role: 'Admin',
-          can_delete_recipe: true
-        });
-
-        return { data: { id: signUpData.user.id, username: 'admin', role: 'Admin' }, error: null };
+        userId = signUpData.user.id;
+      } else {
+        return { error: new Error('Invalid username or password') };
       }
-      return { error: new Error('Invalid username or password') };
+    } else {
+      userId = authData.user.id;
     }
 
     // Fetch the user's role from the public users table
-    const { data: userData, error: userError } = await supabase
+    let { data: userData, error: userError } = await supabase
       .from('users')
       .select('*')
-      .eq('id', authData.user.id)
+      .eq('id', userId)
       .single();
 
-    if (userError || !userData) {
+    // Self-healing: If profile missing and it's the master admin, recreate it
+    if ((userError || !userData) && username === 'admin') {
+      const { data: newAdmin, error: insertError } = await supabase.from('users').upsert({
+        id: userId,
+        username: 'admin',
+        password_hash: 'managed-by-supabase',
+        role: 'Admin',
+        can_delete_recipe: true
+      }).select().single();
+
+      if (insertError) {
+        console.error('Failed to inject admin profile:', insertError);
+        return { error: new Error('Failed to create admin profile in database. Check RLS policies.') };
+      }
+      userData = newAdmin;
+    } else if (userError || !userData) {
       return { error: new Error('User profile not found in database') };
     }
 
