@@ -136,9 +136,9 @@ export default function RecipeCalculator() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
         {/* Input Card */}
-        <div className="glass-card rounded-2xl p-6 lg:col-span-1 border-emerald-500/20 shadow-[0_0_20px_rgba(16,185,129,0.05)]">
+        <div className="glass-card rounded-2xl p-6 lg:col-span-1 border-orange-500/20 shadow-[0_0_20px_rgba(230,81,0,0.05)]">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-400">
+            <div className="w-10 h-10 rounded-full bg-orange-500/10 flex items-center justify-center text-orange-400">
               <Calculator className="w-5 h-5" />
             </div>
             <h2 className="text-xl font-semibold text-white">Target Output</h2>
@@ -152,7 +152,7 @@ export default function RecipeCalculator() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-emerald-400 mb-2">
+            <label className="block text-sm font-medium text-orange-400 mb-2">
               New Required Yield ({recipe.output_unit})
             </label>
             <input 
@@ -160,7 +160,7 @@ export default function RecipeCalculator() {
               step="any"
               value={requiredOutput}
               onChange={(e) => setRequiredOutput(e.target.value)}
-              className="w-full bg-slate-900/80 border border-emerald-500/50 rounded-xl py-4 px-5 text-2xl font-bold text-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-all shadow-inner"
+              className="w-full bg-slate-900/80 border border-orange-500/50 rounded-xl py-4 px-5 text-2xl font-bold text-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition-all shadow-inner"
               placeholder="Enter quantity..."
             />
           </div>
@@ -168,14 +168,14 @@ export default function RecipeCalculator() {
 
         {/* Cost Summary Card */}
         <div className="glass-card rounded-2xl p-6 lg:col-span-2 flex flex-col justify-center items-center text-center relative overflow-hidden">
-          <div className="absolute top-[-50%] right-[-10%] w-64 h-64 bg-emerald-600/10 rounded-full blur-[80px]" />
+          <div className="absolute top-[-50%] right-[-10%] w-64 h-64 bg-orange-600/10 rounded-full blur-[80px]" />
           
-          <Receipt className="w-10 h-10 text-emerald-500 mb-4 opacity-80" />
+          <Receipt className="w-10 h-10 text-orange-500 mb-4 opacity-80" />
           <h3 className="text-slate-400 font-medium mb-2 uppercase tracking-widest text-sm">Total Batch Cost</h3>
           <div className="text-5xl md:text-6xl font-bold text-white tracking-tight flex items-center justify-center">
             {formatCurrency(totalCost)}
           </div>
-          <div className="mt-4 text-emerald-400 font-medium bg-emerald-500/10 px-4 py-1.5 rounded-full border border-emerald-500/20 text-sm">
+          <div className="mt-4 text-orange-400 font-medium bg-orange-500/10 px-4 py-1.5 rounded-full border border-orange-500/20 text-sm">
             For {requiredOutput || 0} {recipe.output_unit} of {recipe.product_name}
           </div>
         </div>
@@ -191,8 +191,8 @@ export default function RecipeCalculator() {
               <tr className="border-b border-slate-800 text-sm font-semibold text-slate-400 uppercase tracking-wider">
                 <th className="py-4 px-4">Ingredient</th>
                 <th className="py-4 px-4 text-right print:hidden">Master Qty</th>
-                <th className="py-4 px-4 text-right bg-emerald-500/5 text-emerald-400 rounded-tl-lg">Required Qty</th>
-                <th className="py-4 px-4 text-right bg-emerald-500/5 rounded-tr-lg print:hidden">Est. Cost</th>
+                <th className="py-4 px-4 text-right bg-[#FFE0B2] text-black rounded-tl-lg">Required Qty</th>
+                <th className="py-4 px-4 text-right bg-[#FFE0B2] text-slate-800 rounded-tr-lg print:hidden">Est. Cost</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800/50">
@@ -202,10 +202,10 @@ export default function RecipeCalculator() {
                   <td className="py-4 px-4 text-right text-slate-400 print:hidden">
                     {formatNumber(ing.quantity)} {ing.unit}
                   </td>
-                  <td className="py-4 px-4 text-right bg-emerald-500/5 font-bold text-emerald-400 text-lg">
+                  <td className="py-4 px-4 text-right bg-[#FFE0B2] font-black text-black text-lg">
                     {formatNumber(ing.displayScaledQty)} {ing.displayUnit}
                   </td>
-                  <td className="py-4 px-4 text-right bg-emerald-500/5 text-slate-300 print:hidden">
+                  <td className="py-4 px-4 text-right bg-[#FFE0B2] text-slate-800 font-medium print:hidden">
                     {ing.calculatedCost > 0 ? formatCurrency(ing.calculatedCost) : '-'}
                   </td>
                 </tr>
@@ -226,10 +226,10 @@ export default function RecipeCalculator() {
 
         {/* Export Buttons */}
         <div className="flex gap-4 justify-center mt-6 pt-6 border-t border-slate-800 print:hidden">
-          <button onClick={handlePrint} className="flex items-center gap-2 px-4 py-2 bg-emerald-500/20 text-emerald-400 rounded-lg hover:bg-emerald-500/30 transition">
+          <button onClick={handlePrint} className="flex items-center gap-2 px-4 py-2 bg-orange-500/20 text-orange-400 rounded-lg hover:bg-orange-500/30 transition">
             <Printer className="w-4 h-4" /> Print
           </button>
-          <button onClick={exportToCSV} className="flex items-center gap-2 px-4 py-2 bg-emerald-500/20 text-emerald-400 rounded-lg hover:bg-emerald-500/30 transition">
+          <button onClick={exportToCSV} className="flex items-center gap-2 px-4 py-2 bg-orange-500/20 text-orange-400 rounded-lg hover:bg-orange-500/30 transition">
             <Download className="w-4 h-4" /> Export CSV
           </button>
         </div>
