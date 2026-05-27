@@ -416,8 +416,8 @@ export default function UploadRecipe() {
                 <>
                   <FileType className="w-16 h-16 text-purple-400/80 mx-auto mb-4" />
                   <h3 className="text-xl font-semibold text-white mb-2">Upload Excel or CSV File</h3>
-                  <p className="text-sm text-slate-400 mb-6 max-w-md mx-auto">
-                    RG FOODS automatically maps column names for ingredients, units, quantities, purchase unit size, and prices.
+                  <p className="text-slate-400 text-sm max-w-sm mx-auto leading-relaxed">
+                    RG automatically maps column names for ingredients, units, quantities, purchase unit size, and prices.
                   </p>
                   <label className="bg-purple-500 hover:bg-purple-400 text-slate-950 px-8 py-3 rounded-xl font-semibold cursor-pointer shadow-[0_0_20px_rgba(147,51,234,0.2)] transition inline-block">
                     Browse Files
@@ -438,8 +438,8 @@ export default function UploadRecipe() {
             <div className="glass-card rounded-2xl p-12 text-center border-dashed border-slate-700/60 hover:border-purple-500/40 transition">
               <ImageIcon className="w-16 h-16 text-purple-400/80 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-white mb-2">Upload Recipe Photo / Image</h3>
-              <p className="text-sm text-slate-400 mb-6 max-w-md mx-auto">
-                Upload any screenshot or photo of your recipe. RG FOODS displays the image directly inside the creator screen to help you key in details with 100% accuracy.
+              <p className="text-slate-400 text-sm max-w-sm mx-auto leading-relaxed">
+                Upload any screenshot or photo of your recipe. RG displays the image directly inside the creator screen to help you key in details with 100% accuracy.
               </p>
               <label className="bg-purple-500 hover:bg-purple-400 text-slate-950 px-8 py-3 rounded-xl font-semibold cursor-pointer shadow-[0_0_20px_rgba(147,51,234,0.2)] transition inline-block">
                 Browse Images
@@ -460,8 +460,8 @@ export default function UploadRecipe() {
                 <ClipboardList className="w-6 h-6 text-purple-400" />
                 <h3 className="text-xl font-semibold text-white">Paste Raw Recipe Text</h3>
               </div>
-              <p className="text-sm text-slate-400 mb-4">
-                Paste raw lists (e.g. from WhatsApp, emails, or Notes) below. RG FOODS smart parses quantities and ingredients line-by-line.
+              <p className="text-slate-400 text-sm max-w-sm mx-auto leading-relaxed">
+                Paste raw lists (e.g. from WhatsApp, emails, or Notes) below. RG smart parses quantities and ingredients line-by-line.
               </p>
               <textarea
                 value={inputText}
