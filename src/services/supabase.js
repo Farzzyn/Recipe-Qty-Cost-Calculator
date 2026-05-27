@@ -255,7 +255,7 @@ export const mockDb = {
         
         if (signUpError) return { error: signUpError };
         if (!signUpData?.user) {
-          return { error: new Error("Setup blocked: User 'admin' is stuck in an unconfirmed state. Please disable 'Confirm email' in Supabase, delete the user from the Supabase Users dashboard, and try again.") };
+          return { error: new Error('Account exists but cannot be accessed. Check Supabase Auth: "Confirm Email" must be OFF, and you may need to delete the existing admin user to recreate it.') };
         }
         
         // Inject into public users table
