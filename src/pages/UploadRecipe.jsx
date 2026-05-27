@@ -417,7 +417,7 @@ export default function UploadRecipe() {
                   <FileType className="w-16 h-16 text-emerald-400/80 mx-auto mb-4" />
                   <h3 className="text-xl font-semibold text-white mb-2">Upload Excel or CSV File</h3>
                   <p className="text-sm text-slate-400 mb-6 max-w-md mx-auto">
-                    SCALECRAFT automatically maps column names for ingredients, units, quantities, purchase unit size, and prices.
+                    RG FOODS automatically maps column names for ingredients, units, quantities, purchase unit size, and prices.
                   </p>
                   <label className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-8 py-3 rounded-xl font-semibold cursor-pointer shadow-[0_0_20px_rgba(16,185,129,0.2)] transition inline-block">
                     Browse Files
@@ -439,7 +439,7 @@ export default function UploadRecipe() {
               <ImageIcon className="w-16 h-16 text-emerald-400/80 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-white mb-2">Upload Recipe Photo / Image</h3>
               <p className="text-sm text-slate-400 mb-6 max-w-md mx-auto">
-                Upload any screenshot or photo of your recipe. SCALECRAFT displays the image directly inside the creator screen to help you key in details with 100% accuracy.
+                Upload any screenshot or photo of your recipe. RG FOODS displays the image directly inside the creator screen to help you key in details with 100% accuracy.
               </p>
               <label className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-8 py-3 rounded-xl font-semibold cursor-pointer shadow-[0_0_20px_rgba(16,185,129,0.2)] transition inline-block">
                 Browse Images
@@ -461,7 +461,7 @@ export default function UploadRecipe() {
                 <h3 className="text-xl font-semibold text-white">Paste Raw Recipe Text</h3>
               </div>
               <p className="text-sm text-slate-400 mb-4">
-                Paste raw lists (e.g. from WhatsApp, emails, or Notes) below. SCALECRAFT smart parses quantities and ingredients line-by-line.
+                Paste raw lists (e.g. from WhatsApp, emails, or Notes) below. RG FOODS smart parses quantities and ingredients line-by-line.
               </p>
               <textarea
                 value={inputText}
