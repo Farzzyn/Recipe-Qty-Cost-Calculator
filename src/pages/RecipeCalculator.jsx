@@ -34,41 +34,6 @@ export default function RecipeCalculator() {
   if (loading) return <div className="p-8 text-slate-400">Loading calculator...</div>;
   if (!recipe) return <div className="p-8 text-red-400">Recipe not found.</div>;
 
-  // Export Functions
-  const handlePrint = () => {
-    // Use a simple print of the page; we could open a new window with minimal styles if needed
-    window.print();
-  };
-
-  const exportToText = () => {
-    const lines = [];
-    lines.push(`Recipe: ${recipe.product_name}`);
-    lines.push(`Master Output: ${recipe.output_quantity} ${recipe.output_unit}`);
-    lines.push(`Target Output: ${targetOutput || 0} ${recipe.output_unit}`);
-    lines.push('');
-    lines.push('Ingredients');
-    lines.push('Name\tOriginal Qty\tScaled Qty\tUnit\tEst. Cost (₹)');
-    calculatedIngredients.forEach(ing => {
-      const cost = ing.calculatedCost > 0 ? ing.calculatedCost.toFixed(2) : '0.00';
-      lines.push(`${ing.ingredient_name}\t${formatNumber(ing.quantity)}\t${formatNumber(ing.displayScaledQty)}\t${ing.displayUnit}\t${cost}`);
-    });
-    lines.push('');
-    lines.push(`Total Batch Cost: ₹${totalCost.toFixed(2)}`);
-
-    const blob = new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.setAttribute('href', url);
-    link.setAttribute('download', `${recipe.product_name}_scaled_${targetOutput}_${recipe.output_unit}.txt`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
-  // --- UI changes: Export button group ---
-  // Insert after the Cost Summary Card (line ~112)
-  // We'll modify the JSX to include a new div with three buttons: Print, Export CSV, Export Text
-  // Also adjust layout for proper alignment
   const targetOutput = Math.max(0, parseFloat(requiredOutput) || 0);
 
   const calculatedIngredients = ingredients.map(ing => {
@@ -88,15 +53,64 @@ export default function RecipeCalculator() {
 
   const totalCost = calculateTotalBatchCost(calculatedIngredients);
   
+  const getExportFilename = (ext) => {
+    const safeName = recipe.product_name.replace(/[^a-z0-9]/gi, '_').replace(/_+/g, '_');
+    const dateStr = new Date().toISOString().split('T')[0];
+    return `${safeName}_${targetOutput}${recipe.output_unit}_${dateStr}.${ext}`;
+  };
+
+  const validateExport = () => {
+    if (!calculatedIngredients || calculatedIngredients.length === 0) {
+      alert("No ingredients to export.");
+      return false;
+    }
+    if (targetOutput <= 0) {
+      alert("Required quantity must be greater than 0.");
+      return false;
+    }
+    return true;
+  };
+
+  const handlePrint = () => {
+    if (!validateExport()) return;
+    window.print();
+  };
+
+  const exportToText = () => {
+    if (!validateExport()) return;
+    const lines = [];
+    lines.push(`Product Name: ${recipe.product_name}`);
+    lines.push(`Required Quantity: ${targetOutput} ${recipe.output_unit}`);
+    lines.push(`Total Product Cost: ${formatCurrency(totalCost)}`);
+    lines.push('');
+    lines.push('Ingredient Name\tQuantity\tUnit\tCost');
+    calculatedIngredients.forEach(ing => {
+      const costStr = ing.calculatedCost > 0 ? formatCurrency(ing.calculatedCost) : '-';
+      lines.push(`${ing.ingredient_name}\t${formatNumber(ing.displayScaledQty)}\t${ing.displayUnit}\t${costStr}`);
+    });
+
+    const blob = new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', getExportFilename('txt'));
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const exportToCSV = () => {
-    const headers = ['Ingredient Name', 'Original Qty', 'Scaled Qty', 'Unit', 'Estimated Cost (INR)'];
-    const rows = calculatedIngredients.map(ing => [
-      ing.ingredient_name,
-      formatNumber(ing.quantity),
-      formatNumber(ing.displayScaledQty),
-      ing.displayUnit,
-      ing.calculatedCost > 0 ? ing.calculatedCost.toFixed(2) : '0.00'
-    ]);
+    if (!validateExport()) return;
+    const headers = ['Ingredient Name', 'Quantity', 'Unit', 'Cost'];
+    const rows = calculatedIngredients.map(ing => {
+      const costStr = ing.calculatedCost > 0 ? ing.calculatedCost.toFixed(2) : '0.00';
+      return [
+        ing.ingredient_name,
+        formatNumber(ing.displayScaledQty),
+        ing.displayUnit,
+        costStr
+      ];
+    });
     
     // Create CSV content
     const csvContent = "\uFEFF" // UTF-8 BOM for Excel compatibility
@@ -106,7 +120,7 @@ export default function RecipeCalculator() {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.setAttribute("href", url);
-    link.setAttribute("download", `${recipe.product_name}_scaled_${targetOutput}_${recipe.output_unit}.csv`);
+    link.setAttribute("download", getExportFilename('csv'));
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -128,7 +142,8 @@ export default function RecipeCalculator() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto pb-10 animate-fade-in">
+    <>
+    <div className="max-w-6xl mx-auto pb-10 animate-fade-in print:hidden">
       <div className="flex items-center gap-4 mb-8">
         <button 
           onClick={() => navigate(-1)}
@@ -198,28 +213,28 @@ export default function RecipeCalculator() {
             <thead>
               <tr className="border-b border-slate-800 text-sm font-semibold text-slate-400 uppercase tracking-wider">
                 <th className="py-4 px-4">Ingredient</th>
-                <th className="py-4 px-4 text-right">Master Qty</th>
+                <th className="py-4 px-4 text-right print:hidden">Master Qty</th>
                 <th className="py-4 px-4 text-right bg-emerald-500/5 text-emerald-400 rounded-tl-lg">Required Qty</th>
-                <th className="py-4 px-4 text-right bg-emerald-500/5 rounded-tr-lg">Est. Cost</th>
+                <th className="py-4 px-4 text-right bg-emerald-500/5 rounded-tr-lg print:hidden">Est. Cost</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800/50">
               {calculatedIngredients.map((ing, i) => (
                 <tr key={ing.id || i} className="hover:bg-slate-800/30 transition-colors">
                   <td className="py-4 px-4 text-slate-200 font-medium">{ing.ingredient_name}</td>
-                  <td className="py-4 px-4 text-right text-slate-400">
+                  <td className="py-4 px-4 text-right text-slate-400 print:hidden">
                     {formatNumber(ing.quantity)} {ing.unit}
                   </td>
                   <td className="py-4 px-4 text-right bg-emerald-500/5 font-bold text-emerald-400 text-lg">
                     {formatNumber(ing.displayScaledQty)} {ing.displayUnit}
                   </td>
-                  <td className="py-4 px-4 text-right bg-emerald-500/5 text-slate-300">
+                  <td className="py-4 px-4 text-right bg-emerald-500/5 text-slate-300 print:hidden">
                     {ing.calculatedCost > 0 ? formatCurrency(ing.calculatedCost) : '-'}
                   </td>
                 </tr>
               ))}
             </tbody>
-            <tfoot>
+            <tfoot className="print:hidden">
               <tr className="border-t-2 border-slate-700">
                 <td colSpan="3" className="py-4 px-4 text-right text-slate-400 font-medium">
                   Total Production Cost
@@ -246,5 +261,44 @@ export default function RecipeCalculator() {
         </div>
       </div>
     </div>
+
+    {/* Dedicated Print Layout */}
+    <div className="hidden print:block text-black bg-white w-full h-full font-sans p-8">
+      <div className="border-b-2 border-slate-200 pb-6 mb-6">
+        <h1 className="text-4xl font-bold text-slate-900 mb-2">{recipe.product_name}</h1>
+        <div className="flex justify-between items-end">
+          <div>
+            <p className="text-lg text-slate-600">Required Quantity: <span className="font-semibold text-slate-900">{targetOutput} {recipe.output_unit}</span></p>
+            <p className="text-sm text-slate-500 mt-1">Generated on: {new Date().toLocaleDateString()}</p>
+          </div>
+          <div className="text-right">
+            <p className="text-sm text-slate-600 uppercase tracking-wide">Total Product Cost</p>
+            <p className="text-3xl font-bold text-slate-900">{formatCurrency(totalCost)}</p>
+          </div>
+        </div>
+      </div>
+
+      <table className="w-full text-left border-collapse mb-8">
+        <thead>
+          <tr className="border-b-2 border-slate-300">
+            <th className="py-3 px-2 font-semibold text-slate-800">Ingredient Name</th>
+            <th className="py-3 px-2 font-semibold text-slate-800 text-right">Quantity</th>
+            <th className="py-3 px-2 font-semibold text-slate-800">Unit</th>
+            <th className="py-3 px-2 font-semibold text-slate-800 text-right">Cost</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-slate-200">
+          {calculatedIngredients.map((ing, i) => (
+            <tr key={ing.id || i}>
+              <td className="py-3 px-2 text-slate-800">{ing.ingredient_name}</td>
+              <td className="py-3 px-2 text-slate-800 text-right font-medium">{formatNumber(ing.displayScaledQty)}</td>
+              <td className="py-3 px-2 text-slate-600">{ing.displayUnit}</td>
+              <td className="py-3 px-2 text-slate-800 text-right">{ing.calculatedCost > 0 ? formatCurrency(ing.calculatedCost) : '-'}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    </>
   );
 }
