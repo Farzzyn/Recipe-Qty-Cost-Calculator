@@ -111,7 +111,7 @@ export default function AdminSettings() {
     <div className="max-w-4xl mx-auto animate-fade-in pb-10">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-white mb-1 flex items-center gap-3">
-          <Shield className="w-8 h-8 text-orange-500" /> Admin Settings
+          <Shield className="w-8 h-8 text-purple-500" /> Admin Settings
         </h1>
         <p className="text-slate-400">Manage internal users and role-based access controls.</p>
       </div>
@@ -119,9 +119,9 @@ export default function AdminSettings() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         
         {/* Create User Form */}
-        <div className="glass-card rounded-2xl p-6 md:p-8 border-orange-500/20 shadow-[0_0_20px_rgba(230,81,0,0.05)]">
+        <div className="glass-card rounded-2xl p-6 md:p-8 border-purple-500/20 shadow-[0_0_20px_rgba(147,51,234,0.05)]">
           <div className="flex items-center gap-3 mb-6 border-b border-slate-800 pb-4">
-            <div className="w-10 h-10 rounded-full bg-orange-500/10 flex items-center justify-center text-orange-400">
+            <div className="w-10 h-10 rounded-full bg-purple-500/10 flex items-center justify-center text-purple-400">
               <UserPlus className="w-5 h-5" />
             </div>
             <h2 className="text-xl font-semibold text-white">Create New User</h2>
@@ -135,7 +135,7 @@ export default function AdminSettings() {
           )}
 
           {success && (
-            <div className="bg-orange-500/10 border border-orange-500/20 text-orange-400 px-4 py-3 rounded-xl text-sm mb-6 flex items-start gap-2">
+            <div className="bg-purple-500/10 border border-purple-500/20 text-purple-400 px-4 py-3 rounded-xl text-sm mb-6 flex items-start gap-2">
               <CheckCircle2 className="w-5 h-5 shrink-0 mt-0.5" />
               <p>{success}</p>
             </div>
@@ -151,7 +151,7 @@ export default function AdminSettings() {
                   name="username"
                   value={formData.username}
                   onChange={handleInputChange}
-                  className="w-full bg-slate-900/50 border border-slate-700/50 rounded-xl py-3 pl-10 pr-4 text-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition-all placeholder:text-slate-500"
+                  className="w-full bg-slate-900/50 border border-slate-700/50 rounded-xl py-3 pl-10 pr-4 text-slate-200 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all placeholder:text-slate-500"
                   placeholder="New username"
                 />
               </div>
@@ -166,7 +166,7 @@ export default function AdminSettings() {
                   name="password"
                   value={formData.password}
                   onChange={handleInputChange}
-                  className="w-full bg-slate-900/50 border border-slate-700/50 rounded-xl py-3 pl-10 pr-4 text-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition-all placeholder:text-slate-500"
+                  className="w-full bg-slate-900/50 border border-slate-700/50 rounded-xl py-3 pl-10 pr-4 text-slate-200 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all placeholder:text-slate-500"
                   placeholder="Enter secure password"
                 />
               </div>
@@ -181,7 +181,7 @@ export default function AdminSettings() {
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleInputChange}
-                  className="w-full bg-slate-900/50 border border-slate-700/50 rounded-xl py-3 pl-10 pr-4 text-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition-all placeholder:text-slate-500"
+                  className="w-full bg-slate-900/50 border border-slate-700/50 rounded-xl py-3 pl-10 pr-4 text-slate-200 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all placeholder:text-slate-500"
                   placeholder="Confirm password"
                 />
               </div>
@@ -202,14 +202,14 @@ export default function AdminSettings() {
                 </div>
 
                 <div 
-                  className="flex items-center justify-between p-4 bg-slate-900/50 rounded-xl border border-slate-700/50 cursor-pointer hover:border-orange-500/30 transition-colors"
+                  className="flex items-center justify-between p-4 bg-slate-900/50 rounded-xl border border-slate-700/50 cursor-pointer hover:border-purple-500/30 transition-colors"
                   onClick={() => setFormData(prev => ({ ...prev, canDeleteRecipe: !prev.canDeleteRecipe }))}
                 >
                   <div>
                     <p className="text-sm font-medium text-slate-200">Grant Delete Permission</p>
                     <p className="text-xs text-slate-500">Allow user to permanently delete recipes</p>
                   </div>
-                  <div className="text-orange-500">
+                  <div className="text-purple-500">
                     {formData.canDeleteRecipe ? (
                       <ToggleRight className="w-8 h-8" />
                     ) : (
@@ -223,7 +223,7 @@ export default function AdminSettings() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-400 text-slate-950 font-bold py-3 px-4 rounded-xl transition-colors shadow-[0_0_20px_rgba(230,81,0,0.3)] mt-6 disabled:opacity-70 disabled:cursor-not-allowed"
+              className="w-full flex items-center justify-center gap-2 bg-purple-500 hover:bg-purple-400 text-slate-950 font-bold py-3 px-4 rounded-xl transition-colors shadow-[0_0_20px_rgba(147,51,234,0.3)] mt-6 disabled:opacity-70 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <div className="w-5 h-5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
@@ -266,7 +266,7 @@ export default function AdminSettings() {
                     <div>
                       <p className="font-bold text-lg text-white flex items-center gap-2">
                         {u.username}
-                        {u.id === user?.id && <span className="text-[10px] bg-orange-600/20 border border-orange-500/20 text-orange-500 px-1.5 py-0.5 rounded font-black uppercase tracking-widest">YOU</span>}
+                        {u.id === user?.id && <span className="text-[10px] bg-purple-600/20 border border-purple-500/20 text-purple-500 px-1.5 py-0.5 rounded font-black uppercase tracking-widest">YOU</span>}
                       </p>
                       <p className="text-sm text-slate-400 mt-0.5 tracking-wide">ID: {u.id.substring(0,8)}...</p>
                     </div>
@@ -284,7 +284,7 @@ export default function AdminSettings() {
                     <div 
                       className={`text-sm py-2 px-3 rounded-lg border font-semibold flex items-center justify-center transition-colors cursor-default ${
                         u.role === 'Admin' 
-                          ? 'bg-orange-500/5 border-orange-500/20 text-orange-500' 
+                          ? 'bg-purple-500/5 border-purple-500/20 text-purple-500' 
                           : 'bg-slate-800/50 border-slate-700/50 text-slate-300'
                       }`}
                       title="System Role (Locked)"
@@ -313,3 +313,4 @@ export default function AdminSettings() {
     </div>
   );
 }
+

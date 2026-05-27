@@ -358,7 +358,7 @@ export default function UploadRecipe() {
           onClick={() => { setActiveTab('document'); setShowPreview(false); setErrorMsg(''); }}
           className={`flex items-center gap-2 px-5 py-3 border-b-2 font-medium whitespace-nowrap transition-all ${
             activeTab === 'document' 
-              ? 'border-orange-500 text-orange-400 font-semibold' 
+              ? 'border-purple-500 text-purple-400 font-semibold' 
               : 'border-transparent text-slate-400 hover:text-slate-200'
           }`}
         >
@@ -368,7 +368,7 @@ export default function UploadRecipe() {
           onClick={() => { setActiveTab('image'); setShowPreview(false); setErrorMsg(''); }}
           className={`flex items-center gap-2 px-5 py-3 border-b-2 font-medium whitespace-nowrap transition-all ${
             activeTab === 'image' 
-              ? 'border-orange-500 text-orange-400 font-semibold' 
+              ? 'border-purple-500 text-purple-400 font-semibold' 
               : 'border-transparent text-slate-400 hover:text-slate-200'
           }`}
         >
@@ -378,7 +378,7 @@ export default function UploadRecipe() {
           onClick={() => { setActiveTab('text'); setShowPreview(false); setErrorMsg(''); }}
           className={`flex items-center gap-2 px-5 py-3 border-b-2 font-medium whitespace-nowrap transition-all ${
             activeTab === 'text' 
-              ? 'border-orange-500 text-orange-400 font-semibold' 
+              ? 'border-purple-500 text-purple-400 font-semibold' 
               : 'border-transparent text-slate-400 hover:text-slate-200'
           }`}
         >
@@ -395,9 +395,9 @@ export default function UploadRecipe() {
       )}
 
       {successMsg && (
-        <div className="bg-orange-500/10 border border-orange-500/20 rounded-xl p-4 mb-6 flex items-start gap-3">
-          <Check className="w-5 h-5 text-orange-400 shrink-0 mt-0.5" />
-          <p className="text-orange-400 text-sm">{successMsg}</p>
+        <div className="bg-purple-500/10 border border-purple-500/20 rounded-xl p-4 mb-6 flex items-start gap-3">
+          <Check className="w-5 h-5 text-purple-400 shrink-0 mt-0.5" />
+          <p className="text-purple-400 text-sm">{successMsg}</p>
         </div>
       )}
 
@@ -406,20 +406,20 @@ export default function UploadRecipe() {
         <div className="grid grid-cols-1 gap-6">
           {/* Tab 1: Document Upload */}
           {activeTab === 'document' && (
-            <div className="glass-card rounded-2xl p-12 text-center border-dashed border-slate-700/60 hover:border-orange-500/40 transition">
+            <div className="glass-card rounded-2xl p-12 text-center border-dashed border-slate-700/60 hover:border-purple-500/40 transition">
               {loading ? (
                 <div className="flex flex-col items-center justify-center py-6">
-                  <Loader2 className="w-12 h-12 text-orange-400 animate-spin mb-4" />
+                  <Loader2 className="w-12 h-12 text-purple-400 animate-spin mb-4" />
                   <p className="text-slate-300 font-medium">Parsing columns...</p>
                 </div>
               ) : (
                 <>
-                  <FileType className="w-16 h-16 text-orange-400/80 mx-auto mb-4" />
+                  <FileType className="w-16 h-16 text-purple-400/80 mx-auto mb-4" />
                   <h3 className="text-xl font-semibold text-white mb-2">Upload Excel or CSV File</h3>
                   <p className="text-sm text-slate-400 mb-6 max-w-md mx-auto">
                     RG FOODS automatically maps column names for ingredients, units, quantities, purchase unit size, and prices.
                   </p>
-                  <label className="bg-orange-500 hover:bg-orange-400 text-slate-950 px-8 py-3 rounded-xl font-semibold cursor-pointer shadow-[0_0_20px_rgba(230,81,0,0.2)] transition inline-block">
+                  <label className="bg-purple-500 hover:bg-purple-400 text-slate-950 px-8 py-3 rounded-xl font-semibold cursor-pointer shadow-[0_0_20px_rgba(147,51,234,0.2)] transition inline-block">
                     Browse Files
                     <input 
                       type="file" 
@@ -435,13 +435,13 @@ export default function UploadRecipe() {
 
           {/* Tab 2: Reference Image Upload */}
           {activeTab === 'image' && (
-            <div className="glass-card rounded-2xl p-12 text-center border-dashed border-slate-700/60 hover:border-orange-500/40 transition">
-              <ImageIcon className="w-16 h-16 text-orange-400/80 mx-auto mb-4" />
+            <div className="glass-card rounded-2xl p-12 text-center border-dashed border-slate-700/60 hover:border-purple-500/40 transition">
+              <ImageIcon className="w-16 h-16 text-purple-400/80 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-white mb-2">Upload Recipe Photo / Image</h3>
               <p className="text-sm text-slate-400 mb-6 max-w-md mx-auto">
                 Upload any screenshot or photo of your recipe. RG FOODS displays the image directly inside the creator screen to help you key in details with 100% accuracy.
               </p>
-              <label className="bg-orange-500 hover:bg-orange-400 text-slate-950 px-8 py-3 rounded-xl font-semibold cursor-pointer shadow-[0_0_20px_rgba(230,81,0,0.2)] transition inline-block">
+              <label className="bg-purple-500 hover:bg-purple-400 text-slate-950 px-8 py-3 rounded-xl font-semibold cursor-pointer shadow-[0_0_20px_rgba(147,51,234,0.2)] transition inline-block">
                 Browse Images
                 <input 
                   type="file" 
@@ -457,7 +457,7 @@ export default function UploadRecipe() {
           {activeTab === 'text' && (
             <div className="glass-card rounded-2xl p-6 md:p-8">
               <div className="flex items-center gap-3 mb-6">
-                <ClipboardList className="w-6 h-6 text-orange-400" />
+                <ClipboardList className="w-6 h-6 text-purple-400" />
                 <h3 className="text-xl font-semibold text-white">Paste Raw Recipe Text</h3>
               </div>
               <p className="text-sm text-slate-400 mb-4">
@@ -468,13 +468,13 @@ export default function UploadRecipe() {
                 onChange={(e) => setInputText(e.target.value)}
                 placeholder="e.g.&#10;Ribbon Pakkavada&#10;5 kg Rice Powder&#10;1 kg Poola Podi&#10;3 kg Kadala Podi&#10;250 g Salt"
                 rows="10"
-                className="w-full bg-slate-900 border border-slate-800 rounded-xl p-4 text-slate-200 focus:outline-none focus:border-orange-500 font-mono text-sm mb-6 placeholder-slate-600 focus:ring-1 focus:ring-orange-500"
+                className="w-full bg-slate-900 border border-slate-800 rounded-xl p-4 text-slate-200 focus:outline-none focus:border-purple-500 font-mono text-sm mb-6 placeholder-slate-600 focus:ring-1 focus:ring-purple-500"
               />
               <div className="flex justify-end">
                 <button
                   onClick={handleTextParse}
                   disabled={loading}
-                  className="flex items-center gap-2 px-8 py-3 rounded-xl font-semibold text-slate-950 bg-orange-500 hover:bg-orange-400 transition shadow-[0_0_20px_rgba(230,81,0,0.2)] disabled:opacity-75"
+                  className="flex items-center gap-2 px-8 py-3 rounded-xl font-semibold text-slate-950 bg-purple-500 hover:bg-purple-400 transition shadow-[0_0_20px_rgba(147,51,234,0.2)] disabled:opacity-75"
                 >
                   {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Sparkles className="w-5 h-5" />}
                   Parse & Review Recipe
@@ -493,7 +493,7 @@ export default function UploadRecipe() {
           {uploadedImageSrc && (
             <div className="lg:col-span-4 glass-card rounded-2xl p-4 flex flex-col h-[650px]">
               <div className="flex items-center justify-between mb-4 border-b border-slate-800 pb-2">
-                <span className="text-sm font-semibold text-orange-400 flex items-center gap-1.5">
+                <span className="text-sm font-semibold text-purple-400 flex items-center gap-1.5">
                   <ImageIcon className="w-4 h-4" /> Image Helper
                 </span>
                 <label className="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1.5 rounded-lg cursor-pointer transition">
@@ -518,12 +518,12 @@ export default function UploadRecipe() {
           <div className={`${uploadedImageSrc ? 'lg:col-span-8' : 'lg:col-span-12'} glass-card rounded-2xl p-6 md:p-8 flex flex-col h-[650px]`}>
             <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-800 shrink-0">
               <div className="flex items-center gap-3">
-                <Sparkles className="w-6 h-6 text-orange-400" />
+                <Sparkles className="w-6 h-6 text-purple-400" />
                 <h2 className="text-xl font-semibold text-white">Review & Edit Recipe</h2>
               </div>
               <button 
                 onClick={addIngredient}
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-orange-500/10 text-orange-400 rounded-lg hover:bg-orange-500/20 text-xs font-semibold transition"
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-purple-500/10 text-purple-400 rounded-lg hover:bg-purple-500/20 text-xs font-semibold transition"
               >
                 <Plus className="w-3.5 h-3.5" /> Add Ingredient
               </button>
@@ -540,7 +540,7 @@ export default function UploadRecipe() {
                     type="text"
                     value={recipeName}
                     onChange={(e) => setRecipeName(e.target.value)}
-                    className="w-full bg-slate-900 border border-slate-800 rounded-xl py-2.5 px-4 text-white text-sm focus:outline-none focus:border-orange-500"
+                    className="w-full bg-slate-900 border border-slate-800 rounded-xl py-2.5 px-4 text-white text-sm focus:outline-none focus:border-purple-500"
                     placeholder="e.g. Ribbon Pakkavada"
                   />
                 </div>
@@ -552,12 +552,12 @@ export default function UploadRecipe() {
                       step="any"
                       value={outputQty}
                       onChange={(e) => setOutputQty(e.target.value)}
-                      className="w-2/3 bg-slate-900 border border-slate-800 rounded-xl py-2.5 px-4 text-white text-sm focus:outline-none focus:border-orange-500"
+                      className="w-2/3 bg-slate-900 border border-slate-800 rounded-xl py-2.5 px-4 text-white text-sm focus:outline-none focus:border-purple-500"
                     />
                     <select
                       value={outputUnit}
                       onChange={(e) => setOutputUnit(e.target.value)}
-                      className="w-1/3 bg-slate-900 border border-slate-800 rounded-xl py-2.5 px-4 text-white text-sm focus:outline-none focus:border-orange-500 appearance-none"
+                      className="w-1/3 bg-slate-900 border border-slate-800 rounded-xl py-2.5 px-4 text-white text-sm focus:outline-none focus:border-purple-500 appearance-none"
                     >
                       {UNITS.map(u => <option key={u} value={u} className="bg-slate-900 text-slate-100">{u}</option>)}
                     </select>
@@ -576,7 +576,7 @@ export default function UploadRecipe() {
                           type="text"
                           value={ing.ingredient_name}
                           onChange={(e) => handleIngredientChange(index, 'ingredient_name', e.target.value)}
-                          className="w-full bg-slate-950 border border-slate-800 rounded-lg py-2 px-3 text-slate-200 text-sm focus:outline-none focus:border-orange-500"
+                          className="w-full bg-slate-950 border border-slate-800 rounded-lg py-2 px-3 text-slate-200 text-sm focus:outline-none focus:border-purple-500"
                           placeholder="Ingredient Name"
                         />
                       </div>
@@ -586,7 +586,7 @@ export default function UploadRecipe() {
                           step="any"
                           value={ing.quantity}
                           onChange={(e) => handleIngredientChange(index, 'quantity', e.target.value)}
-                          className="w-full bg-slate-950 border border-slate-800 rounded-lg py-2 px-3 text-slate-200 text-sm focus:outline-none focus:border-orange-500"
+                          className="w-full bg-slate-950 border border-slate-800 rounded-lg py-2 px-3 text-slate-200 text-sm focus:outline-none focus:border-purple-500"
                           placeholder="Qty"
                         />
                       </div>
@@ -594,7 +594,7 @@ export default function UploadRecipe() {
                         <select
                           value={ing.unit}
                           onChange={(e) => handleIngredientChange(index, 'unit', e.target.value)}
-                          className="w-full bg-slate-950 border border-slate-800 rounded-lg py-2 px-1 text-slate-200 text-sm focus:outline-none focus:border-orange-500 appearance-none"
+                          className="w-full bg-slate-950 border border-slate-800 rounded-lg py-2 px-1 text-slate-200 text-sm focus:outline-none focus:border-purple-500 appearance-none"
                         >
                           {UNITS.map(u => <option key={u} value={u} className="bg-slate-900 text-slate-100">{u}</option>)}
                         </select>
@@ -605,7 +605,7 @@ export default function UploadRecipe() {
                           step="any"
                           value={ing.purchase_price}
                           onChange={(e) => handleIngredientChange(index, 'purchase_price', e.target.value)}
-                          className="w-full bg-slate-950 border border-slate-800 rounded-lg py-2 px-3 text-slate-200 text-sm focus:outline-none focus:border-orange-500"
+                          className="w-full bg-slate-950 border border-slate-800 rounded-lg py-2 px-3 text-slate-200 text-sm focus:outline-none focus:border-purple-500"
                           placeholder="Cost (₹)"
                         />
                       </div>
@@ -615,7 +615,7 @@ export default function UploadRecipe() {
                           step="any"
                           value={ing.purchase_quantity}
                           onChange={(e) => handleIngredientChange(index, 'purchase_quantity', e.target.value)}
-                          className="w-full bg-slate-950 border border-slate-800 rounded-lg py-2 px-3 text-slate-200 text-sm focus:outline-none focus:border-orange-500"
+                          className="w-full bg-slate-950 border border-slate-800 rounded-lg py-2 px-3 text-slate-200 text-sm focus:outline-none focus:border-purple-500"
                           placeholder="Size"
                         />
                       </div>
@@ -645,7 +645,7 @@ export default function UploadRecipe() {
               <button 
                 onClick={saveRecipeToDatabase}
                 disabled={loading}
-                className="flex items-center gap-2 px-8 py-2.5 rounded-xl font-semibold text-slate-950 bg-orange-500 hover:bg-orange-400 transition shadow-[0_0_20px_rgba(230,81,0,0.3)] disabled:opacity-70"
+                className="flex items-center gap-2 px-8 py-2.5 rounded-xl font-semibold text-slate-950 bg-purple-500 hover:bg-purple-400 transition shadow-[0_0_20px_rgba(147,51,234,0.3)] disabled:opacity-70"
               >
                 {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
                 Save Recipe to DB
@@ -659,3 +659,4 @@ export default function UploadRecipe() {
     </div>
   );
 }
+

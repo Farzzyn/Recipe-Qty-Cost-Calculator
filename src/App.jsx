@@ -49,7 +49,7 @@ function App() {
               <div className="flex flex-col items-center justify-center h-full text-center p-8 animate-fade-in">
                 <h2 className="text-4xl font-bold text-white mb-4">404</h2>
                 <p className="text-slate-400 text-lg mb-6">Oops! The page you're looking for doesn't exist.</p>
-                <Link to="/" className="px-6 py-2 bg-orange-500 hover:bg-orange-400 text-slate-950 font-semibold rounded-lg transition-colors">
+                <Link to="/" className="px-6 py-2 bg-purple-500 hover:bg-purple-400 text-slate-950 font-semibold rounded-lg transition-colors">
                   Return Home
                 </Link>
               </div>
@@ -62,3 +62,4 @@ function App() {
 }
 
 export default App;
+

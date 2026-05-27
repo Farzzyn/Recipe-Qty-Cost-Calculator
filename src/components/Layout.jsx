@@ -19,7 +19,7 @@ export default function Layout() {
   }
 
   return (
-    <div className="flex h-screen bg-slate-950 text-slate-100 font-sans selection:bg-orange-500/30">
+    <div className="flex h-screen bg-slate-950 text-slate-100 font-sans selection:bg-purple-500/30">
       {/* Sidebar Navigation */}
       <aside className="w-64 glass border-r border-slate-800 flex flex-col hidden md:flex print:hidden">
         <div className="p-6 flex items-center gap-3">
@@ -39,7 +39,7 @@ export default function Layout() {
                 to={item.path}
                 className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
                   isActive 
-                    ? 'bg-orange-500/10 text-orange-400 border border-orange-500/20 shadow-[0_0_15px_rgba(230,81,0,0.1)]' 
+                    ? 'bg-purple-500/10 text-purple-400 border border-purple-500/20 shadow-[0_0_15px_rgba(147,51,234,0.1)]' 
                     : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
                 }`}
               >
@@ -54,7 +54,7 @@ export default function Layout() {
           <div className="mb-3 px-2">
             <p className="text-xs text-slate-500 uppercase font-bold tracking-wider mb-1">Logged in as</p>
             <p className="text-sm font-medium text-slate-200 truncate">{user?.username}</p>
-            {user?.role === 'Admin' && <span className="text-[10px] bg-orange-500/20 text-orange-400 px-1.5 py-0.5 rounded font-bold uppercase mt-1 inline-block">Admin</span>}
+            {user?.role === 'Admin' && <span className="text-[10px] bg-purple-500/20 text-purple-400 px-1.5 py-0.5 rounded font-bold uppercase mt-1 inline-block">Admin</span>}
           </div>
           <button
             onClick={logout}
@@ -91,7 +91,7 @@ export default function Layout() {
                   onClick={() => setIsMobileMenuOpen(false)}
                   className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
                     isActive 
-                      ? 'bg-orange-500/10 text-orange-400 border border-orange-500/20 shadow-[0_0_15px_rgba(230,81,0,0.1)]' 
+                      ? 'bg-purple-500/10 text-purple-400 border border-purple-500/20 shadow-[0_0_15px_rgba(147,51,234,0.1)]' 
                       : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
                   }`}
                 >
@@ -104,7 +104,7 @@ export default function Layout() {
         )}
 
         {/* Decorative Background Elements */}
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-orange-900/20 blur-[120px] pointer-events-none print:hidden" />
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-purple-900/20 blur-[120px] pointer-events-none print:hidden" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-teal-900/10 blur-[120px] pointer-events-none print:hidden" />
 
         <div className="flex-1 overflow-y-auto p-4 md:p-8 z-10 custom-scrollbar print:p-0 print:overflow-visible">
@@ -114,3 +114,4 @@ export default function Layout() {
     </div>
   );
 }
+

@@ -45,7 +45,7 @@ export default function Dashboard() {
         </div>
         <Link 
           to="/recipe/new" 
-          className="flex items-center gap-2 bg-orange-500 hover:bg-orange-400 text-slate-950 font-semibold px-5 py-2.5 rounded-lg transition-colors shadow-[0_0_20px_rgba(230,81,0,0.3)] hover:shadow-[0_0_25px_rgba(230,81,0,0.5)]"
+          className="flex items-center gap-2 bg-purple-500 hover:bg-purple-400 text-slate-950 font-semibold px-5 py-2.5 rounded-lg transition-colors shadow-[0_0_20px_rgba(147,51,234,0.3)] hover:shadow-[0_0_25px_rgba(147,51,234,0.5)]"
         >
           <Plus className="w-5 h-5" />
           Add Recipe
@@ -60,14 +60,14 @@ export default function Dashboard() {
             placeholder="Search recipes..." 
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full bg-slate-900/50 border border-slate-700/50 rounded-xl py-3 pl-10 pr-4 text-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition-all placeholder:text-slate-500"
+            className="w-full bg-slate-900/50 border border-slate-700/50 rounded-xl py-3 pl-10 pr-4 text-slate-200 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all placeholder:text-slate-500"
           />
         </div>
       </div>
 
       {loading ? (
         <div className="flex justify-center items-center h-48">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500"></div>
         </div>
       ) : filteredRecipes.length === 0 ? (
         <div className="glass-card rounded-2xl p-12 text-center border-dashed border-slate-700">
@@ -85,12 +85,12 @@ export default function Dashboard() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredRecipes.map((recipe) => (
-            <div key={recipe.id} className="glass-card rounded-2xl p-6 group hover:border-orange-500/30 transition-all duration-300 flex flex-col">
+            <div key={recipe.id} className="glass-card rounded-2xl p-6 group hover:border-purple-500/30 transition-all duration-300 flex flex-col">
               <div className="flex justify-between items-start mb-4">
-                <h3 className="text-xl font-bold text-slate-100 group-hover:text-orange-400 transition-colors">
+                <h3 className="text-xl font-bold text-slate-100 group-hover:text-purple-400 transition-colors">
                   {recipe.product_name}
                 </h3>
-                <span className="bg-slate-800 text-orange-400 text-xs font-bold px-2.5 py-1 rounded-md border border-orange-500/20">
+                <span className="bg-slate-800 text-purple-400 text-xs font-bold px-2.5 py-1 rounded-md border border-purple-500/20">
                   {recipe.output_quantity} {recipe.output_unit}
                 </span>
               </div>
@@ -105,7 +105,7 @@ export default function Dashboard() {
               <div className="flex gap-2 border-t border-slate-800 pt-4 mt-auto">
                 <Link 
                   to={`/recipe/calc/${recipe.id}`}
-                  className="flex-1 flex items-center justify-center gap-2 bg-orange-500/10 hover:bg-orange-500/20 text-orange-400 py-2 rounded-lg transition-colors font-medium text-sm border border-orange-500/20"
+                  className="flex-1 flex items-center justify-center gap-2 bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 py-2 rounded-lg transition-colors font-medium text-sm border border-purple-500/20"
                 >
                   <Calculator className="w-4 h-4" />
                   Scale
@@ -134,3 +134,4 @@ export default function Dashboard() {
     </div>
   );
 }
+

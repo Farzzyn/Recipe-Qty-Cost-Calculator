@@ -119,8 +119,8 @@ export default function RecipeForm() {
 
           {/* Recipe Details */}
           <div className="glass-card rounded-2xl p-6 md:p-8">
-            <h2 className="text-xl font-semibold text-orange-400 mb-6 flex items-center gap-2">
-              <div className="w-2 h-6 bg-orange-500 rounded-full"></div>
+            <h2 className="text-xl font-semibold text-purple-400 mb-6 flex items-center gap-2">
+              <div className="w-2 h-6 bg-purple-500 rounded-full"></div>
               Product Details
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -132,7 +132,7 @@ export default function RecipeForm() {
                   required
                   value={recipe.product_name}
                   onChange={handleRecipeChange}
-                  className="w-full bg-slate-900/50 border border-slate-700/50 rounded-xl py-3 px-4 text-slate-100 focus:outline-none focus:border-orange-500 transition-colors"
+                  className="w-full bg-slate-900/50 border border-slate-700/50 rounded-xl py-3 px-4 text-slate-100 focus:outline-none focus:border-purple-500 transition-colors"
                   placeholder="e.g. Ribbon Pakkavada"
                 />
               </div>
@@ -145,7 +145,7 @@ export default function RecipeForm() {
                   required
                   value={recipe.output_quantity}
                   onChange={handleRecipeChange}
-                  className="w-full bg-slate-900/50 border border-slate-700/50 rounded-xl py-3 px-4 text-slate-100 focus:outline-none focus:border-orange-500 transition-colors"
+                  className="w-full bg-slate-900/50 border border-slate-700/50 rounded-xl py-3 px-4 text-slate-100 focus:outline-none focus:border-purple-500 transition-colors"
                   placeholder="e.g. 13.5"
                 />
               </div>
@@ -155,7 +155,7 @@ export default function RecipeForm() {
                   name="output_unit"
                   value={recipe.output_unit}
                   onChange={handleRecipeChange}
-                  className="w-full bg-slate-900/50 border border-slate-700/50 rounded-xl py-3 px-4 text-slate-100 focus:outline-none focus:border-orange-500 transition-colors appearance-none"
+                  className="w-full bg-slate-900/50 border border-slate-700/50 rounded-xl py-3 px-4 text-slate-100 focus:outline-none focus:border-purple-500 transition-colors appearance-none"
                 >
                   {UNITS.map(u => <option key={u} value={u} className="bg-slate-900 text-slate-100">{u}</option>)}
                 </select>
@@ -166,14 +166,14 @@ export default function RecipeForm() {
           {/* Ingredients */}
           <div className="glass-card rounded-2xl p-6 md:p-8 overflow-hidden">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-semibold text-orange-400 flex items-center gap-2">
-                <div className="w-2 h-6 bg-orange-500 rounded-full"></div>
+              <h2 className="text-xl font-semibold text-purple-400 flex items-center gap-2">
+                <div className="w-2 h-6 bg-purple-500 rounded-full"></div>
                 Ingredients Formulation
               </h2>
               <button 
                 type="button"
                 onClick={addIngredient}
-                className="flex items-center gap-2 text-sm font-medium text-orange-400 hover:text-orange-300 bg-orange-500/10 hover:bg-orange-500/20 px-3 py-1.5 rounded-lg transition-colors border border-orange-500/20"
+                className="flex items-center gap-2 text-sm font-medium text-purple-400 hover:text-purple-300 bg-purple-500/10 hover:bg-purple-500/20 px-3 py-1.5 rounded-lg transition-colors border border-purple-500/20"
               >
                 <Plus className="w-4 h-4" /> Add Row
               </button>
@@ -199,7 +199,7 @@ export default function RecipeForm() {
                           value={ing.ingredient_name}
                           onChange={(e) => handleIngredientChange(index, 'ingredient_name', e.target.value)}
                           placeholder="Ingredient Name"
-                          className="w-full bg-slate-800/50 border border-slate-700/50 rounded-lg py-2 px-3 text-slate-100 text-sm focus:outline-none focus:border-orange-500 transition-colors"
+                          className="w-full bg-slate-800/50 border border-slate-700/50 rounded-lg py-2 px-3 text-slate-100 text-sm focus:outline-none focus:border-purple-500 transition-colors"
                         />
                       </div>
                       
@@ -211,12 +211,12 @@ export default function RecipeForm() {
                           value={ing.quantity}
                           onChange={(e) => handleIngredientChange(index, 'quantity', e.target.value)}
                           placeholder="Qty"
-                          className="w-full min-w-0 bg-slate-800/50 border border-slate-700/50 rounded-lg py-2 px-2 text-slate-100 text-sm focus:outline-none focus:border-orange-500 transition-colors"
+                          className="w-full min-w-0 bg-slate-800/50 border border-slate-700/50 rounded-lg py-2 px-2 text-slate-100 text-sm focus:outline-none focus:border-purple-500 transition-colors"
                         />
                         <select 
                           value={ing.unit}
                           onChange={(e) => handleIngredientChange(index, 'unit', e.target.value)}
-                          className="w-16 bg-slate-800/50 border border-slate-700/50 rounded-lg py-2 px-1 text-slate-100 text-xs focus:outline-none focus:border-orange-500"
+                          className="w-16 bg-slate-800/50 border border-slate-700/50 rounded-lg py-2 px-1 text-slate-100 text-xs focus:outline-none focus:border-purple-500"
                         >
                           {UNITS.map(u => <option key={u} value={u} className="bg-slate-900 text-slate-100">{u}</option>)}
                         </select>
@@ -229,12 +229,12 @@ export default function RecipeForm() {
                           value={ing.purchase_quantity}
                           onChange={(e) => handleIngredientChange(index, 'purchase_quantity', e.target.value)}
                           placeholder="Quantity"
-                          className="w-full min-w-0 bg-slate-800/50 border border-slate-700/50 rounded-lg py-2 px-2 text-slate-100 text-sm focus:outline-none focus:border-orange-500 transition-colors"
+                          className="w-full min-w-0 bg-slate-800/50 border border-slate-700/50 rounded-lg py-2 px-2 text-slate-100 text-sm focus:outline-none focus:border-purple-500 transition-colors"
                         />
                         <select 
                           value={ing.purchase_unit}
                           onChange={(e) => handleIngredientChange(index, 'purchase_unit', e.target.value)}
-                          className="w-16 bg-slate-800/50 border border-slate-700/50 rounded-lg py-2 px-1 text-slate-100 text-xs focus:outline-none focus:border-orange-500"
+                          className="w-16 bg-slate-800/50 border border-slate-700/50 rounded-lg py-2 px-1 text-slate-100 text-xs focus:outline-none focus:border-purple-500"
                         >
                           {UNITS.map(u => <option key={u} value={u} className="bg-slate-900 text-slate-100">{u}</option>)}
                         </select>
@@ -247,7 +247,7 @@ export default function RecipeForm() {
                           value={ing.purchase_price}
                           onChange={(e) => handleIngredientChange(index, 'purchase_price', e.target.value)}
                           placeholder="Total Price"
-                          className="w-full bg-slate-800/50 border border-slate-700/50 rounded-lg py-2 px-3 text-slate-100 text-sm focus:outline-none focus:border-orange-500 transition-colors"
+                          className="w-full bg-slate-800/50 border border-slate-700/50 rounded-lg py-2 px-3 text-slate-100 text-sm focus:outline-none focus:border-purple-500 transition-colors"
                         />
                       </div>
 
@@ -267,8 +267,8 @@ export default function RecipeForm() {
               </div>
             </div>
             
-            <div className="mt-4 p-4 bg-orange-500/5 border border-orange-500/10 rounded-xl text-sm text-slate-400">
-              <span className="text-orange-400 font-medium">Tip:</span> If you don't need cost tracking for an ingredient, leave the purchase quantity and price fields blank.
+            <div className="mt-4 p-4 bg-purple-500/5 border border-purple-500/10 rounded-xl text-sm text-slate-400">
+              <span className="text-purple-400 font-medium">Tip:</span> If you don't need cost tracking for an ingredient, leave the purchase quantity and price fields blank.
             </div>
           </div>
         </div>
@@ -286,7 +286,7 @@ export default function RecipeForm() {
             <button 
               type="submit"
               disabled={loading}
-              className="flex items-center gap-2 px-8 py-2.5 rounded-xl font-semibold text-slate-950 bg-orange-500 hover:bg-orange-400 transition-colors shadow-[0_0_20px_rgba(230,81,0,0.3)] disabled:opacity-70"
+              className="flex items-center gap-2 px-8 py-2.5 rounded-xl font-semibold text-slate-950 bg-purple-500 hover:bg-purple-400 transition-colors shadow-[0_0_20px_rgba(147,51,234,0.3)] disabled:opacity-70"
             >
               {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
               Save Recipe
@@ -297,3 +297,4 @@ export default function RecipeForm() {
     </div>
   );
 }
+
