@@ -231,5 +231,71 @@ export const mockDb = {
     const filtered = local.filter(r => r.id !== id);
     saveLocalRecipes(filtered);
     return { error: null };
+  },
+
+  // ─── Auth & User Management ──────────────────────────────────────────────────
+  loginUser: async (username, password) => {
+    // Mock implementation using local storage
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    
+    // First time setup: if no users exist, create a default admin
+    if (users.length === 0) {
+      if (username === 'admin' && password === 'admin') {
+        const defaultAdmin = {
+          id: crypto.randomUUID(),
+          username: 'admin',
+          password: 'admin', // Note: In production, backend handles bcrypt hashing
+          role: 'Admin',
+          can_delete_recipe: true
+        };
+        localStorage.setItem('users', JSON.stringify([defaultAdmin]));
+        return { data: defaultAdmin, error: null };
+      }
+    }
+    
+    const user = users.find(u => u.username === username && u.password === password); 
+    if (user) {
+      return { data: user, error: null };
+    }
+    return { data: null, error: new Error('Invalid username or password') };
+  },
+
+  registerAdmin: async (adminUsername, adminPassword, currentUserId) => {
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const hasAdmins = users.some(u => u.role === 'Admin');
+    
+    if (hasAdmins) {
+      const currentUser = users.find(u => u.id === currentUserId);
+      if (!currentUser || currentUser.role !== 'Admin') {
+        return { error: new Error('Unauthorized: Only an Admin can create new users.') };
+      }
+    }
+
+    if (users.find(u => u.username === adminUsername)) {
+      return { error: new Error('Username already exists') };
+    }
+
+    const newUser = {
+      id: crypto.randomUUID(),
+      username: adminUsername,
+      password: adminPassword, 
+      role: 'Admin',
+      can_delete_recipe: true
+    };
+    
+    users.push(newUser);
+    localStorage.setItem('users', JSON.stringify(users));
+    return { data: newUser, error: null };
+  },
+
+  checkPermission: async (userId, permissionKey) => {
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const user = users.find(u => u.id === userId);
+    if (!user) return false;
+    
+    if (permissionKey === 'CAN_DELETE_RECIPE') {
+      return !!user.can_delete_recipe;
+    }
+    return false;
   }
 };

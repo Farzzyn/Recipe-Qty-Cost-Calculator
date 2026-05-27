@@ -2,8 +2,10 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Plus, Calculator, Edit, Trash2, Search, Package } from 'lucide-react';
 import { mockDb } from '../services/supabase';
+import { useAuth } from '../context/AuthContext';
 
 export default function Dashboard() {
+  const { canDeleteRecipe } = useAuth();
   const [recipes, setRecipes] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
@@ -115,13 +117,15 @@ export default function Dashboard() {
                 >
                   <Edit className="w-4 h-4" />
                 </Link>
-                <button 
-                  onClick={() => handleDelete(recipe.id)}
-                  className="px-3 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg transition-colors border border-red-500/20"
-                  title="Delete"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
+                {canDeleteRecipe() && (
+                  <button 
+                    onClick={() => handleDelete(recipe.id)}
+                    className="px-3 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg transition-colors border border-red-500/20"
+                    title="Delete"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                )}
               </div>
             </div>
           ))}

@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { Home, PlusSquare, Upload, Calculator } from 'lucide-react';
+import { Home, PlusSquare, Upload, Calculator, LogOut } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 export default function Layout() {
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { user, logout } = useAuth();
 
   const navItems = [
     { name: 'Dashboard', path: '/', icon: <Home className="w-5 h-5" /> },
@@ -43,6 +45,21 @@ export default function Layout() {
             );
           })}
         </nav>
+
+        <div className="p-4 border-t border-slate-800 mt-auto">
+          <div className="mb-3 px-2">
+            <p className="text-xs text-slate-500 uppercase font-bold tracking-wider mb-1">Logged in as</p>
+            <p className="text-sm font-medium text-slate-200 truncate">{user?.username}</p>
+            {user?.role === 'Admin' && <span className="text-[10px] bg-orange-500/20 text-orange-400 px-1.5 py-0.5 rounded font-bold uppercase mt-1 inline-block">Admin</span>}
+          </div>
+          <button
+            onClick={logout}
+            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-400 hover:bg-red-500/10 hover:text-red-400 transition-colors"
+          >
+            <LogOut className="w-5 h-5" />
+            <span className="font-medium">Logout</span>
+          </button>
+        </div>
       </aside>
 
       {/* Main Content */}
