@@ -237,7 +237,7 @@ export const mockDb = {
 
   // ─── Auth & User Management ──────────────────────────────────────────────────
   loginUser: async (username, password) => {
-    const email = `${username.toLowerCase()}@rgfoods.com`;
+    const email = `${username.toLowerCase()}@rgfoods.local`;
     
     // Attempt real Supabase sign in
     const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
@@ -254,6 +254,10 @@ export const mockDb = {
         });
         
         if (signUpError) return { error: signUpError };
+        
+        if (!signUpData || !signUpData.user) {
+          return { error: new Error('Account creation blocked. Please ensure "Confirm email" is turned OFF in Supabase Authentication settings.') };
+        }
         
         // Inject into public users table
         await supabase.from('users').upsert({
@@ -295,7 +299,7 @@ export const mockDb = {
       return { error: new Error('Unauthorized: Only an Admin can create new users.') };
     }
 
-    const email = `${username.toLowerCase()}@rgfoods.com`;
+    const email = `${username.toLowerCase()}@rgfoods.local`;
     
     // We use a secondary auth client that doesn't persist the session, so the admin isn't logged out
     const authClient = createClient(supabaseUrl, supabaseAnonKey, {
