@@ -254,9 +254,8 @@ export const mockDb = {
         });
         
         if (signUpError) return { error: signUpError };
-        
-        if (!signUpData || !signUpData.user) {
-          return { error: new Error('Account creation blocked. Please ensure "Confirm email" is turned OFF in Supabase Authentication settings.') };
+        if (!signUpData?.user) {
+          return { error: new Error("Setup blocked: User 'admin' is stuck in an unconfirmed state. Please disable 'Confirm email' in Supabase, delete the user from the Supabase Users dashboard, and try again.") };
         }
         
         // Inject into public users table
